@@ -41,12 +41,12 @@
         android:max="100"
         android:progress="75"
         app:indicatorColor="#FFFFFF"
-        app:indicatorSize="250dp"
+        app:indicatorSize="300dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvSubtitulo"
         app:trackColor="#333333"
-        app:trackThickness="12dp" />
+        app:trackThickness="16dp" />
 
     <TextView
         android:id="@+id/tvTiempo"
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:text="25:00"
         android:textColor="#FFFFFF"
-        android:textSize="56sp"
+        android:textSize="72sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/pbCronometro"
         app:layout_constraintEnd_toEndOf="@+id/pbCronometro"

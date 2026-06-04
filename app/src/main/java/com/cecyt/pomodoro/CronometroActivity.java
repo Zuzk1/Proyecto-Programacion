@@ -1,14 +1,17 @@
 package com.cecyt.pomodoro;
 
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
@@ -26,6 +29,11 @@ public class CronometroActivity extends AppCompatActivity {
     private CircularProgressIndicator barraProgreso;
     private FloatingActionButton botonPausar;
     private FloatingActionButton botonRenunciar;
+
+    // Controladores de animacion.
+    private ObjectAnimator animacionBarra;
+    private ObjectAnimator animacionTexto;
+    private ObjectAnimator animacionMenuActual;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +56,9 @@ public class CronometroActivity extends AppCompatActivity {
         barraProgreso.setMax(1500000);
         barraProgreso.setProgress((int) tiempoRestante);
 
+        // Inicializa los objetos de animacion de levitacion central.
+        configurarAnimaciones();
+
         // Asigna funcion de alternancia al boton de pausa/reproduccion.
         botonPausar.setOnClickListener(v -> {
             if (estaCorriendo) {
@@ -62,21 +73,66 @@ public class CronometroActivity extends AppCompatActivity {
 
         // Configura acciones de la barra de navegacion inferior.
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+        // Accede al contenedor interno de los iconos del menu.
+        BottomNavigationMenuView menuView = (BottomNavigationMenuView) bottomNavigationView.getChildAt(0);
+
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
+            int indiceSeleccionado = -1;
 
             if (itemId == R.id.nav_enfoque) {
-                return true;
+                indiceSeleccionado = 0;
             } else if (itemId == R.id.nav_tareas) {
-                return true;
+                indiceSeleccionado = 1;
             } else if (itemId == R.id.nav_estadisticas) {
-                return true;
+                indiceSeleccionado = 2;
             }
-            return false;
+
+            // Ejecuta la animacion sobre el icono correspondiente.
+            if (indiceSeleccionado != -1) {
+                animarIconoMenu(menuView, indiceSeleccionado);
+            }
+
+            return true;
         });
+
+        // Fuerza la animacion en el primer elemento al iniciar la actividad.
+        bottomNavigationView.setSelectedItemId(R.id.nav_enfoque);
     }
 
-    // Inicia el hilo del temporizador y actualiza el icono a pausa.
+    // Define los parametros fisicos de la animacion de levitacion.
+    private void configurarAnimaciones() {
+        animacionBarra = ObjectAnimator.ofFloat(barraProgreso, "translationY", 0f, -30f, 0f);
+        animacionBarra.setDuration(5000);
+        animacionBarra.setRepeatCount(ObjectAnimator.INFINITE);
+
+        animacionTexto = ObjectAnimator.ofFloat(textoTiempo, "translationY", 0f, -30f, 0f);
+        animacionTexto.setDuration(5000);
+        animacionTexto.setRepeatCount(ObjectAnimator.INFINITE);
+    }
+
+    // Gestiona la animacion de levitacion para los items del BottomNavigationView.
+    private void animarIconoMenu(BottomNavigationMenuView menuView, int indiceSeleccionado) {
+        // Cancela la animacion en curso si existe.
+        if (animacionMenuActual != null) {
+            animacionMenuActual.cancel();
+        }
+
+        // Restablece todos los iconos a su coordenada Y original.
+        for (int i = 0; i < menuView.getChildCount(); i++) {
+            menuView.getChildAt(i).setTranslationY(0f);
+        }
+
+        // Obtiene la vista especifica del icono tocado e inicia su levitacion.
+        View vistaIcono = menuView.getChildAt(indiceSeleccionado);
+        animacionMenuActual = ObjectAnimator.ofFloat(vistaIcono, "translationY", 0f, -15f, 0f);
+        animacionMenuActual.setDuration(2500);
+        animacionMenuActual.setRepeatCount(ObjectAnimator.INFINITE);
+        animacionMenuActual.start();
+    }
+
+    // Inicia el hilo del temporizador, actualiza el icono y reanuda las animaciones.
     private void iniciarCronometro() {
         temporizador = new CountDownTimer(tiempoRestante, 1000) {
             @Override
@@ -91,20 +147,33 @@ public class CronometroActivity extends AppCompatActivity {
                 botonPausar.setImageResource(android.R.drawable.ic_media_play);
                 textoTiempo.setText("00:00");
                 barraProgreso.setProgress(0);
+                detenerYRestablecerAnimaciones();
             }
         }.start();
 
         estaCorriendo = true;
         botonPausar.setImageResource(android.R.drawable.ic_media_pause);
+
+        // Condicional para iniciar o reanudar la animacion desde su punto de pausa.
+        if (animacionBarra.isPaused()) {
+            animacionBarra.resume();
+            animacionTexto.resume();
+        } else {
+            animacionBarra.start();
+            animacionTexto.start();
+        }
     }
 
-    // Detiene el hilo del temporizador y actualiza el icono a reproduccion.
+    // Detiene el hilo del temporizador y congela las animaciones en su estado actual.
     private void pausarCronometro() {
         if (temporizador != null) {
             temporizador.cancel();
         }
         estaCorriendo = false;
         botonPausar.setImageResource(android.R.drawable.ic_media_play);
+
+        animacionBarra.pause();
+        animacionTexto.pause();
     }
 
     // Despliega cuadro de dialogo para confirmar la interrupcion del Pomodoro.
@@ -117,7 +186,7 @@ public class CronometroActivity extends AppCompatActivity {
                 .show();
     }
 
-    // Reinicia las variables de tiempo y el estado visual al valor por defecto.
+    // Reinicia las variables de tiempo, actualiza la interfaz y cancela animaciones.
     private void reiniciarCronometro() {
         if (temporizador != null) {
             temporizador.cancel();
@@ -126,6 +195,7 @@ public class CronometroActivity extends AppCompatActivity {
         estaCorriendo = false;
         botonPausar.setImageResource(android.R.drawable.ic_media_play);
         actualizarInterfaz();
+        detenerYRestablecerAnimaciones();
     }
 
     // Calcula minutos y segundos para actualizar el texto y la barra de progreso.
@@ -136,5 +206,13 @@ public class CronometroActivity extends AppCompatActivity {
         String formato = String.format("%02d:%02d", minutos, segundos);
         textoTiempo.setText(formato);
         barraProgreso.setProgress((int) tiempoRestante);
+    }
+
+    // Finaliza los objetos animadores y devuelve las vistas a su coordenada original.
+    private void detenerYRestablecerAnimaciones() {
+        animacionBarra.cancel();
+        animacionTexto.cancel();
+        barraProgreso.setTranslationY(0f);
+        textoTiempo.setTranslationY(0f);
     }
 }
