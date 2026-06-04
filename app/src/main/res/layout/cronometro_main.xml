@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -17,6 +18,7 @@
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:letterSpacing="0.12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,18 +37,19 @@
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/pbCronometro"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:layout_marginTop="32dp"
         android:max="100"
         android:progress="75"
         app:indicatorColor="#FFFFFF"
-        app:indicatorSize="220dp"
+        app:indicatorSize="240dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvSubtitulo"
-        app:trackColor="#333333"
-        app:trackThickness="16dp" />
+        app:trackColor="#2E2E35"
+        app:trackThickness="14dp"
+        app:trackCornerRadius="7dp" />
 
     <TextView
         android:id="@+id/tvTiempo"
@@ -56,6 +59,7 @@
         android:textColor="#FFFFFF"
         android:textSize="56sp"
         android:textStyle="bold"
+        android:includeFontPadding="false"
         app:layout_constraintBottom_toBottomOf="@+id/pbCronometro"
         app:layout_constraintEnd_toEndOf="@+id/pbCronometro"
         app:layout_constraintStart_toStartOf="@+id/pbCronometro"
@@ -65,8 +69,9 @@
         android:id="@+id/llIndicadores"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pbCronometro">
@@ -75,53 +80,53 @@
             android:id="@+id/tvCiclo1"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginEnd="16dp"
-            android:background="@android:drawable/btn_default"
-            android:backgroundTint="#FFFFFF"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/ciclo_activo"
             android:gravity="center"
             android:text="1"
             android:textColor="#000000"
+            android:textSize="14sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvCiclo2"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginEnd="16dp"
-            android:background="@android:drawable/btn_default"
-            android:backgroundTint="#333333"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/ciclo_inactivo"
             android:gravity="center"
             android:text="2"
-            android:textColor="#FFFFFF" />
+            android:textColor="#888888"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvCiclo3"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginEnd="16dp"
-            android:background="@android:drawable/btn_default"
-            android:backgroundTint="#333333"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/ciclo_inactivo"
             android:gravity="center"
             android:text="3"
-            android:textColor="#FFFFFF" />
+            android:textColor="#888888"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvCiclo4"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@android:drawable/btn_default"
-            android:backgroundTint="#333333"
+            android:background="@drawable/ciclo_inactivo"
             android:gravity="center"
             android:text="4"
-            android:textColor="#FFFFFF" />
+            android:textColor="#888888"
+            android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/llControles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:gravity="center"
+        android:layout_marginTop="28dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -133,23 +138,29 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="32dp"
             android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:contentDescription="Renunciar"
             app:backgroundTint="#E53935"
-            app:tint="#FFFFFF" />
+            app:tint="#FFFFFF"
+            app:elevation="4dp"
+            app:fabSize="normal" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnPausar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_media_play"
+            android:src="@android:drawable/ic_media_pause"
+            android:contentDescription="Pausar"
             app:backgroundTint="#FFFFFF"
-            app:tint="#000000" />
+            app:tint="#000000"
+            app:elevation="4dp"
+            app:fabSize="normal" />
     </LinearLayout>
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottieGato"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         app:lottie_autoPlay="false"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/gato_dormido"
@@ -162,7 +173,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#1E1E24"
-        app:itemIconSize="32dp"
+        app:itemIconSize="28dp"
         app:itemIconTint="#FFFFFF"
         app:itemTextAppearanceActive="@style/EstiloTextoNavegador"
         app:itemTextAppearanceInactive="@style/EstiloTextoNavegador"
