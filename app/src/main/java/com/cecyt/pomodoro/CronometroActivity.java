@@ -1,52 +1,54 @@
 package com.cecyt.pomodoro;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 public class CronometroActivity extends AppCompatActivity {
 
-    // Variables de configuracion
+    // Control de estado de la actividad y tiempo.
     private boolean mantenerSplashScreen = true;
     private CountDownTimer temporizador;
-    private long tiempoRestante = 1500000; // 25 minutos expresados en milisegundos
+    private long tiempoRestante = 1500000; // 25 minutos.
     private boolean estaCorriendo = false;
 
-    // Declaracion de componentes de la interfaz
+    // Vistas de la interfaz.
     private TextView textoTiempo;
     private CircularProgressIndicator barraProgreso;
-    private Button botonPausar;
+    private FloatingActionButton botonPausar;
+    private FloatingActionButton botonRenunciar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Inicializa pantalla de carga.
         SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cronometro_main);
 
-        // Pantalla de carga visible
+        // Mantiene la pantalla de carga activa por 850ms.
         splashScreen.setKeepOnScreenCondition(() -> mantenerSplashScreen);
-
-        // Temporizador de 850 milisegundos para ocultar la pantalla de carga
         new Handler(Looper.getMainLooper()).postDelayed(() -> mantenerSplashScreen = false, 850);
 
-        // Enlace de los elementos de la interfaz con el codigo
+        // Enlaza variables con los IDs del XML.
         textoTiempo = findViewById(R.id.tvTiempo);
         barraProgreso = findViewById(R.id.pbCronometro);
         botonPausar = findViewById(R.id.btnPausar);
+        botonRenunciar = findViewById(R.id.btnRenunciar);
 
-        // Configuracion inicial de la barra de progreso
-        barraProgreso.setMax((int) 1500000);
+        // Configura limite y estado inicial de la barra.
+        barraProgreso.setMax(1500000);
         barraProgreso.setProgress((int) tiempoRestante);
 
-        // Asignacion de evento al boton principal
+        // Asigna funcion de alternancia al boton de pausa/reproduccion.
         botonPausar.setOnClickListener(v -> {
             if (estaCorriendo) {
                 pausarCronometro();
@@ -55,27 +57,26 @@ public class CronometroActivity extends AppCompatActivity {
             }
         });
 
-        // Configuracion de la barra de navegacion inferior
+        // Asigna funcion de confirmacion al boton de renuncia.
+        botonRenunciar.setOnClickListener(v -> mostrarDialogoAdvertencia());
+
+        // Configura acciones de la barra de navegacion inferior.
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
 
             if (itemId == R.id.nav_enfoque) {
-                // Logica para mostrar la pantalla principal del cronometro
                 return true;
             } else if (itemId == R.id.nav_tareas) {
-                // Logica para reemplazar la vista con el fragmento de tareas
                 return true;
             } else if (itemId == R.id.nav_estadisticas) {
-                // Logica para reemplazar la vista con el fragmento de estadisticas
                 return true;
             }
-
             return false;
         });
     }
 
-    // Metodo para arrancar el conteo regresivo
+    // Inicia el hilo del temporizador y actualiza el icono a pausa.
     private void iniciarCronometro() {
         temporizador = new CountDownTimer(tiempoRestante, 1000) {
             @Override
@@ -87,26 +88,47 @@ public class CronometroActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 estaCorriendo = false;
-                botonPausar.setText("INICIAR");
+                botonPausar.setImageResource(android.R.drawable.ic_media_play);
                 textoTiempo.setText("00:00");
                 barraProgreso.setProgress(0);
             }
         }.start();
 
         estaCorriendo = true;
-        botonPausar.setText("PAUSAR");
+        botonPausar.setImageResource(android.R.drawable.ic_media_pause);
     }
 
-    // Metodo para detener el conteo sin reiniciar el tiempo
+    // Detiene el hilo del temporizador y actualiza el icono a reproduccion.
     private void pausarCronometro() {
         if (temporizador != null) {
             temporizador.cancel();
         }
         estaCorriendo = false;
-        botonPausar.setText("REANUDAR");
+        botonPausar.setImageResource(android.R.drawable.ic_media_play);
     }
 
-    // Metodo para calcular y mostrar los minutos y segundos exactos en la pantalla
+    // Despliega cuadro de dialogo para confirmar la interrupcion del Pomodoro.
+    private void mostrarDialogoAdvertencia() {
+        new AlertDialog.Builder(this)
+                .setTitle("Advertencia")
+                .setMessage("¿Estás seguro de renunciar a la sesión? Se aplicará el castigo correspondiente.")
+                .setPositiveButton("Renunciar", (dialog, which) -> reiniciarCronometro())
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    // Reinicia las variables de tiempo y el estado visual al valor por defecto.
+    private void reiniciarCronometro() {
+        if (temporizador != null) {
+            temporizador.cancel();
+        }
+        tiempoRestante = 1500000;
+        estaCorriendo = false;
+        botonPausar.setImageResource(android.R.drawable.ic_media_play);
+        actualizarInterfaz();
+    }
+
+    // Calcula minutos y segundos para actualizar el texto y la barra de progreso.
     private void actualizarInterfaz() {
         int minutos = (int) (tiempoRestante / 1000) / 60;
         int segundos = (int) (tiempoRestante / 1000) % 60;

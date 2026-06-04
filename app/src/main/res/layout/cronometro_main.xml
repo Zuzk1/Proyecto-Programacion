@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0E0A4B"
+    android:background="#1F1F24"
     tools:context=".CronometroActivity">
 
     <TextView
@@ -113,35 +113,34 @@
             android:textColor="#FFFFFF" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnPausar"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="32dp"
+    <LinearLayout
+        android:id="@+id/llControles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
-        android:backgroundTint="#FFFFFF"
-        android:text="PAUSAR"
-        android:textColor="#000000"
-        android:textStyle="bold"
+        android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/llIndicadores" />
+        app:layout_constraintTop_toBottomOf="@+id/llIndicadores">
 
-    <Button
-        android:id="@+id/btnRenunciar"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:backgroundTint="#E53935"
-        android:text="RENUNCIAR"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnPausar" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnRenunciar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            app:backgroundTint="#E53935"
+            app:tint="#FFFFFF" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnPausar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_media_play"
+            app:backgroundTint="#FFFFFF"
+            app:tint="#000000" />
+    </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
@@ -154,4 +153,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
