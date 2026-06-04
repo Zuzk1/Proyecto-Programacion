@@ -15,4 +15,7 @@
         <!-- Define el tema original al que cambiara despues de la animacion -->
         <item name="postSplashScreenTheme">@style/Theme.Pomodoro</item>
     </style>
+    <style name="EstiloTextoNavegador">
+        <item name="android:textSize">14sp</item>
+    </style>
 </resources>
