@@ -2,11 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_enfoque"
+        android:icon="@drawable/ic_reloj"
         android:title="Enfoque" />
     <item
         android:id="@+id/nav_tareas"
+        android:icon="@drawable/ic_tareas"
         android:title="Tareas" />
     <item
         android:id="@+id/nav_estadisticas"
+        android:icon="@drawable/ic_grafica"
         android:title="Estadísticas" />
 </menu>
