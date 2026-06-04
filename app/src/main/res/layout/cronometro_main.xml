@@ -12,12 +12,13 @@
         android:id="@+id/tvTitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="48dp"
         android:text="SESIÓN DE ENFOQUE"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.532"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,21 +34,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTitulo" />
 
-    <ProgressBar
+    <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/pbCronometro"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:indeterminate="false"
         android:max="100"
         android:progress="75"
-        android:progressDrawable="@android:drawable/progress_horizontal"
-        android:progressTint="#FFFFFF"
-        android:backgroundTint="#333333"
+        app:indicatorColor="#FFFFFF"
+        app:indicatorSize="250dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvSubtitulo" />
+        app:layout_constraintTop_toBottomOf="@+id/tvSubtitulo"
+        app:trackColor="#333333"
+        app:trackThickness="12dp" />
 
     <TextView
         android:id="@+id/tvTiempo"
