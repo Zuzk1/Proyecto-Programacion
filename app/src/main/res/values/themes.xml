@@ -1,9 +1,18 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
+
     <style name="Base.Theme.Pomodoro" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
     </style>
 
     <style name="Theme.Pomodoro" parent="Base.Theme.Pomodoro" />
+
+    <!-- TemaSplash Screen -->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <!-- Color de fondo de la animacion -->
+        <item name="windowSplashScreenBackground">#1A1A24</item>
+        <!-- Define el recurso del icono a mostrar -->
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
+        <!-- Define el tema original al que cambiara despues de la animacion -->
+        <item name="postSplashScreenTheme">@style/Theme.Pomodoro</item>
+    </style>
 </resources>
