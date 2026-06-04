@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#151515"
+    android:background="#232f72"
     tools:context=".CronometroActivity">
 
     <TextView
@@ -136,7 +136,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:backgroundTint="#E53935"
-        android:text="RENUNCIAR (SE APLICARÁ CASTIGO)"
+        android:text="RENUNCIAR"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
