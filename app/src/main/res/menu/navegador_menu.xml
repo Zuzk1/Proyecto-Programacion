@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_enfoque"
+        android:title="Enfoque" />
+    <item
+        android:id="@+id/nav_tareas"
+        android:title="Tareas" />
+    <item
+        android:id="@+id/nav_estadisticas"
+        android:title="Estadísticas" />
+</menu>
