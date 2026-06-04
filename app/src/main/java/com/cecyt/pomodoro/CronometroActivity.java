@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -20,32 +21,27 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 public class CronometroActivity extends AppCompatActivity {
 
-    // Control de estado de la actividad y tiempo.
     private boolean mantenerSplashScreen = true;
     private CountDownTimer temporizador;
 
-    // Constantes de tiempo estructurales (en milisegundos).
     private final long TIEMPO_ENFOQUE = 1500000;
     private final long TIEMPO_DESCANSO_CORTO = 300000;
     private final long TIEMPO_DESCANSO_LARGO = 900000;
 
-    // Variables de logica de estado.
     private long tiempoRestante = TIEMPO_ENFOQUE;
     private boolean estaCorriendo = false;
     private boolean esDescanso = false;
     private int cicloActual = 1;
 
-    // Vistas de la interfaz principal.
     private TextView textoTiempo;
     private TextView tvTitulo;
     private CircularProgressIndicator barraProgreso;
     private FloatingActionButton botonPausar;
     private FloatingActionButton botonRenunciar;
+    private LottieAnimationView gatoAnimado;
 
-    // Vistas de los indicadores de ciclo.
     private TextView tvCiclo1, tvCiclo2, tvCiclo3, tvCiclo4;
 
-    // Controladores de animacion.
     private ObjectAnimator animacionBarra;
     private ObjectAnimator animacionTexto;
     private ObjectAnimator animacionMenuActual;
@@ -59,14 +55,13 @@ public class CronometroActivity extends AppCompatActivity {
         splashScreen.setKeepOnScreenCondition(() -> mantenerSplashScreen);
         new Handler(Looper.getMainLooper()).postDelayed(() -> mantenerSplashScreen = false, 850);
 
-        // Vinculacion de vistas generales.
         textoTiempo = findViewById(R.id.tvTiempo);
         tvTitulo = findViewById(R.id.tvTitulo);
         barraProgreso = findViewById(R.id.pbCronometro);
         botonPausar = findViewById(R.id.btnPausar);
         botonRenunciar = findViewById(R.id.btnRenunciar);
+        gatoAnimado = findViewById(R.id.lottieGato);
 
-        // Vinculacion de indicadores numericos.
         tvCiclo1 = findViewById(R.id.tvCiclo1);
         tvCiclo2 = findViewById(R.id.tvCiclo2);
         tvCiclo3 = findViewById(R.id.tvCiclo3);
@@ -105,14 +100,12 @@ public class CronometroActivity extends AppCompatActivity {
             if (indiceSeleccionado != -1) {
                 animarIconoMenu(menuView, indiceSeleccionado);
             }
-
             return true;
         });
 
         bottomNavigationView.setSelectedItemId(R.id.nav_enfoque);
     }
 
-    // Configura parametros de animacion de levitacion en el eje Y.
     private void configurarAnimaciones() {
         animacionBarra = ObjectAnimator.ofFloat(barraProgreso, "translationY", 0f, -30f, 0f);
         animacionBarra.setDuration(5000);
@@ -123,7 +116,6 @@ public class CronometroActivity extends AppCompatActivity {
         animacionTexto.setRepeatCount(ObjectAnimator.INFINITE);
     }
 
-    // Gestiona levitacion para la barra de navegacion inferior.
     private void animarIconoMenu(BottomNavigationMenuView menuView, int indiceSeleccionado) {
         if (animacionMenuActual != null) {
             animacionMenuActual.cancel();
@@ -140,7 +132,6 @@ public class CronometroActivity extends AppCompatActivity {
         animacionMenuActual.start();
     }
 
-    // Ejecuta el decremento de tiempo e inicia las animaciones.
     private void iniciarCronometro() {
         temporizador = new CountDownTimer(tiempoRestante, 1000) {
             @Override
@@ -157,6 +148,7 @@ public class CronometroActivity extends AppCompatActivity {
 
         estaCorriendo = true;
         botonPausar.setImageResource(android.R.drawable.ic_media_pause);
+        gatoAnimado.playAnimation();
 
         if (animacionBarra.isPaused()) {
             animacionBarra.resume();
@@ -167,23 +159,23 @@ public class CronometroActivity extends AppCompatActivity {
         }
     }
 
-    // Pausa la ejecucion del tiempo y congela las animaciones.
     private void pausarCronometro() {
         if (temporizador != null) {
             temporizador.cancel();
         }
         estaCorriendo = false;
         botonPausar.setImageResource(android.R.drawable.ic_media_play);
+        gatoAnimado.pauseAnimation();
 
         animacionBarra.pause();
         animacionTexto.pause();
     }
 
-    // Evalua la maquina de estados y prepara el reloj para el siguiente ciclo.
     private void procesarFinDeCiclo() {
         estaCorriendo = false;
         botonPausar.setImageResource(android.R.drawable.ic_media_play);
         detenerYRestablecerAnimaciones();
+        gatoAnimado.pauseAnimation();
 
         if (!esDescanso) {
             actualizarIndicadorVisual(cicloActual);
@@ -212,7 +204,6 @@ public class CronometroActivity extends AppCompatActivity {
         actualizarInterfaz();
     }
 
-    // Cambia diseno del ciclo actual a completado.
     private void actualizarIndicadorVisual(int ciclo) {
         TextView tvObjetivo = obtenerTextViewPorCiclo(ciclo);
         if (tvObjetivo != null) {
@@ -221,7 +212,6 @@ public class CronometroActivity extends AppCompatActivity {
         }
     }
 
-    // Cambia diseno del ciclo entrante a activo.
     private void configurarIndicadorActual(int ciclo) {
         TextView tvObjetivo = obtenerTextViewPorCiclo(ciclo);
         if (tvObjetivo != null) {
@@ -230,7 +220,6 @@ public class CronometroActivity extends AppCompatActivity {
         }
     }
 
-    // Retorna instancia de TextView por numero.
     private TextView obtenerTextViewPorCiclo(int ciclo) {
         switch (ciclo) {
             case 1: return tvCiclo1;
@@ -241,7 +230,6 @@ public class CronometroActivity extends AppCompatActivity {
         }
     }
 
-    // Devuelve los 4 indicadores a estado base.
     private void restaurarIndicadoresGlobales() {
         int colorOscuro = Color.parseColor("#333333");
         int colorBlanco = Color.parseColor("#FFFFFF");
@@ -256,7 +244,6 @@ public class CronometroActivity extends AppCompatActivity {
         tvCiclo4.setTextColor(colorBlanco);
     }
 
-    // Instancia el cuadro de confirmacion de abandono.
     private void mostrarDialogoAdvertencia() {
         new AlertDialog.Builder(this)
                 .setTitle("Advertencia")
@@ -266,7 +253,6 @@ public class CronometroActivity extends AppCompatActivity {
                 .show();
     }
 
-    // Restablece valores de maquina de estados a inicio.
     private void reiniciarCronometro() {
         if (temporizador != null) {
             temporizador.cancel();
@@ -277,6 +263,9 @@ public class CronometroActivity extends AppCompatActivity {
         cicloActual = 1;
 
         botonPausar.setImageResource(android.R.drawable.ic_media_play);
+        gatoAnimado.pauseAnimation();
+        gatoAnimado.setProgress(0);
+
         tvTitulo.setText("SESIÓN DE ENFOQUE");
         barraProgreso.setIndicatorColor(Color.parseColor("#FFFFFF"));
 
@@ -288,7 +277,6 @@ public class CronometroActivity extends AppCompatActivity {
         detenerYRestablecerAnimaciones();
     }
 
-    // Ejecuta calculo de formato MM:SS y dibuja vista.
     private void actualizarInterfaz() {
         int minutos = (int) (tiempoRestante / 1000) / 60;
         int segundos = (int) (tiempoRestante / 1000) % 60;
@@ -298,7 +286,6 @@ public class CronometroActivity extends AppCompatActivity {
         barraProgreso.setProgress((int) tiempoRestante);
     }
 
-    // Cancela objetos de animacion y reinicia coordenadas.
     private void detenerYRestablecerAnimaciones() {
         animacionBarra.cancel();
         animacionTexto.cancel();
