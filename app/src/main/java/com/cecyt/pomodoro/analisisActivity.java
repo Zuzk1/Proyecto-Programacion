@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,61 +26,69 @@ public class analisisActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.analisis_main);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        try {
+            EdgeToEdge.enable(this);
+            setContentView(R.layout.analisis_main);
 
-        // Inicializar el gestor de base de datos local
-        gestor = new GestorEstadisticas(this);
+            ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                return insets;
+            });
 
-        configurarBotonVolver();
-        cargarDatosReales();
+            // Inicializar el gestor de base de datos local
+            gestor = new GestorEstadisticas(this);
 
-        // Extraer los datos de la semana y dibujar la gráfica
-        int[] datosPomodorosSemana = gestor.getDatosSemana();
-        dibujarGraficaDeBarras(datosPomodorosSemana);
+            configurarBotonVolver();
+            cargarDatosReales();
 
-        // Conectar el botón de Tienda a la Actividad de Personalización
-        findViewById(R.id.btnTienda).setOnClickListener(v -> {
-            Intent intent = new Intent(analisisActivity.this, personalizacionActivity.class);
-            startActivity(intent);
-        });
+            // Extraer los datos de la semana y dibujar la gráfica
+            int[] datosPomodorosSemana = gestor.getDatosSemana();
+            dibujarGraficaDeBarras(datosPomodorosSemana);
+
+            // Conectar el botón de Tienda a la Actividad de Personalización
+            findViewById(R.id.btnTienda).setOnClickListener(v -> {
+                Intent intent = new Intent(analisisActivity.this, personalizacionActivity.class);
+                startActivity(intent);
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error al cargar la pantalla: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void cargarDatosReales() {
-        // 1. Obtener datos desde SharedPreferences
         int minutosTotales = gestor.getMinutosTotales();
         int completados = gestor.getPomodorosCompletados();
         int fallos = gestor.getPomodorosFallados();
         int racha = gestor.getRachaActual();
         int puntos = gestor.getPuntos();
 
-        // 2. Formatear Tiempo Total (Horas y Minutos)
+        // Formatear Tiempo Total (Horas y Minutos)
         int horas = minutosTotales / 60;
         int minutosRestantes = minutosTotales % 60;
         String textoTiempo = "Tiempo de Enfoque Total: " + horas + " hrs " + minutosRestantes + " min";
         ((TextView) findViewById(R.id.tvTiempoTotal)).setText(textoTiempo);
 
-        // 3. Imprimir Pomodoros y Puntos
+        // Imprimir Pomodoros y Puntos
         ((TextView) findViewById(R.id.tvPomodorosCompletados)).setText("Pomodoros Completados: " + completados);
         ((TextView) findViewById(R.id.tvPuntos)).setText(puntos + " Puntos");
 
-        // 4. Formatear Racha (Gris + Rojo)
+        // Formatear Racha (Gris + Rojo)
         TextView tvRacha = findViewById(R.id.tvRachaActual);
         String textoRacha = "Racha Actual: " + racha + " Días (¡Pérdida en caso de Fallo!)";
         SpannableString spannableRacha = new SpannableString(textoRacha);
-        int inicioRojoRacha = textoRacha.indexOf("("); // Encuentra dónde empieza el paréntesis
+        int inicioRojoRacha = textoRacha.indexOf("(");
 
-        spannableRacha.setSpan(new ForegroundColorSpan(Color.parseColor("#A0A0A0")), 0, inicioRojoRacha, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableRacha.setSpan(new ForegroundColorSpan(Color.parseColor("#E57373")), inicioRojoRacha, textoRacha.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        if (inicioRojoRacha != -1) {
+            spannableRacha.setSpan(new ForegroundColorSpan(Color.parseColor("#A0A0A0")), 0, inicioRojoRacha, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableRacha.setSpan(new ForegroundColorSpan(Color.parseColor("#E57373")), inicioRojoRacha, textoRacha.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
         tvRacha.setText(spannableRacha);
 
-        // 5. Calcular y Formatear Tasa de Fallos Matemática
+        // Calcular y Formatear Tasa de Fallos
         float porcentajeFallo = 0;
         int intentosTotales = completados + fallos;
         if (intentosTotales > 0) {
@@ -90,10 +99,12 @@ public class analisisActivity extends AppCompatActivity {
         String stringPorcentaje = String.format("%.0f%%", porcentajeFallo);
         String textoFallos = "Tasa de Fallos: " + stringPorcentaje + " · Bloques Abandonados (" + fallos + ")";
         SpannableString spannableFallos = new SpannableString(textoFallos);
-        int inicioRojoFallos = textoFallos.indexOf("·"); // Encuentra dónde empieza el punto
+        int inicioRojoFallos = textoFallos.indexOf("·");
 
-        spannableFallos.setSpan(new ForegroundColorSpan(Color.parseColor("#A0A0A0")), 0, inicioRojoFallos, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableFallos.setSpan(new ForegroundColorSpan(Color.parseColor("#E57373")), inicioRojoFallos, textoFallos.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        if (inicioRojoFallos != -1) {
+            spannableFallos.setSpan(new ForegroundColorSpan(Color.parseColor("#A0A0A0")), 0, inicioRojoFallos, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableFallos.setSpan(new ForegroundColorSpan(Color.parseColor("#E57373")), inicioRojoFallos, textoFallos.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
         tvFallos.setText(spannableFallos);
     }
 
@@ -103,25 +114,27 @@ public class analisisActivity extends AppCompatActivity {
     }
 
     private void dibujarGraficaDeBarras(int[] datos) {
+        // Validación de seguridad para que nunca explote si la base de datos está vacía
+        if (datos == null || datos.length == 0) {
+            datos = new int[]{0, 0, 0, 0, 0, 0, 0};
+        }
+
         LinearLayout llContenedorBarras = findViewById(R.id.llContenedorBarras);
         llContenedorBarras.removeAllViews();
 
         String[] dias = {"Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"};
 
-        // Auto-escala el límite de la gráfica basado en tu mejor día
         int MAX_VALOR_EJE_Y = 8;
         for (int dato : datos) {
             if (dato > MAX_VALOR_EJE_Y) MAX_VALOR_EJE_Y = dato + 2;
         }
 
-        for (int i = 0; i < datos.length; i++) {
-            // Contenedor principal de la columna
+        for (int i = 0; i < datos.length && i < dias.length; i++) {
             LinearLayout columna = new LinearLayout(this);
             columna.setOrientation(LinearLayout.VERTICAL);
             columna.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
             columna.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
 
-            // Área donde vive la barra
             LinearLayout areaBarra = new LinearLayout(this);
             areaBarra.setOrientation(LinearLayout.VERTICAL);
             areaBarra.setWeightSum(MAX_VALOR_EJE_Y);
@@ -129,12 +142,10 @@ public class analisisActivity extends AppCompatActivity {
             paramsAreaBarra.bottomMargin = 8;
             areaBarra.setLayoutParams(paramsAreaBarra);
 
-            // Espacio en blanco sobre la barra
             float vacio = MAX_VALOR_EJE_Y - datos[i];
             View espaciador = new View(this);
             espaciador.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, vacio));
 
-            // La Barra visual
             View barra = new View(this);
             barra.setBackgroundResource(R.drawable.fondo_barra);
             LinearLayout.LayoutParams paramsBarra = new LinearLayout.LayoutParams(
@@ -145,7 +156,6 @@ public class analisisActivity extends AppCompatActivity {
             areaBarra.addView(espaciador);
             areaBarra.addView(barra);
 
-            // Texto debajo de la barra
             TextView tvDia = new TextView(this);
             tvDia.setText(dias[i]);
             tvDia.setTextColor(Color.parseColor("#A0A0A0"));
