@@ -12,6 +12,9 @@ import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
+import android.animation.ValueAnimator;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
@@ -46,6 +49,9 @@ public class CronometroActivity extends AppCompatActivity {
     private ObjectAnimator animacionTexto;
     private ObjectAnimator animacionMenuActual;
 
+    // Declaracion del ralentizador a nivel de clase
+    private ValueAnimator ralentizador;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
@@ -59,6 +65,9 @@ public class CronometroActivity extends AppCompatActivity {
         tvTitulo = findViewById(R.id.tvTitulo);
         barraProgreso = findViewById(R.id.pbCronometro);
         botonPausar = findViewById(R.id.btnPausar);
+
+        botonPausar.setImageResource(android.R.drawable.ic_media_play);
+
         botonRenunciar = findViewById(R.id.btnRenunciar);
         gatoAnimado = findViewById(R.id.lottieGato);
 
@@ -133,6 +142,13 @@ public class CronometroActivity extends AppCompatActivity {
     }
 
     private void iniciarCronometro() {
+
+        if (ralentizador != null && ralentizador.isRunning()) {
+            ralentizador.cancel();
+        }
+
+        gatoAnimado.setSpeed(1f);
+
         temporizador = new CountDownTimer(tiempoRestante, 1000) {
             @Override
             public void onTick(long milisegundos) {
@@ -148,7 +164,8 @@ public class CronometroActivity extends AppCompatActivity {
 
         estaCorriendo = true;
         botonPausar.setImageResource(android.R.drawable.ic_media_pause);
-        gatoAnimado.playAnimation();
+
+        gatoAnimado.resumeAnimation();
 
         if (animacionBarra.isPaused()) {
             animacionBarra.resume();
@@ -165,7 +182,24 @@ public class CronometroActivity extends AppCompatActivity {
         }
         estaCorriendo = false;
         botonPausar.setImageResource(android.R.drawable.ic_media_play);
-        gatoAnimado.pauseAnimation();
+
+        if (ralentizador != null && ralentizador.isRunning()) {
+            ralentizador.cancel();
+        }
+
+        ralentizador = ValueAnimator.ofFloat(gatoAnimado.getSpeed(), 0f);
+        ralentizador.setDuration(600);
+        ralentizador.addUpdateListener(anim -> {
+            gatoAnimado.setSpeed((float) anim.getAnimatedValue());
+        });
+
+        ralentizador.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                gatoAnimado.pauseAnimation();
+            }
+        });
+        ralentizador.start();
 
         animacionBarra.pause();
         animacionTexto.pause();
