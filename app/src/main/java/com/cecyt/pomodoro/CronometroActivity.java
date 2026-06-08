@@ -2,6 +2,7 @@ package com.cecyt.pomodoro;
 
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -91,10 +92,19 @@ public class CronometroActivity extends AppCompatActivity {
 
             if (itemId == R.id.nav_enfoque) {
                 indiceSeleccionado = 0;
+                // Como ya estás en la pantalla de enfoque (Cronómetro), aquí no necesitas un Intent.
+
             } else if (itemId == R.id.nav_tareas) {
                 indiceSeleccionado = 1;
+                // Orden para ir a Tareas
+                Intent intentTareas = new Intent(CronometroActivity.this, tareasActivity.class);
+                startActivity(intentTareas);
+
             } else if (itemId == R.id.nav_estadisticas) {
                 indiceSeleccionado = 2;
+                // Orden para ir a Estadísticas (Análisis)
+                Intent intentEstadisticas = new Intent(CronometroActivity.this, analisisActivity.class);
+                startActivity(intentEstadisticas);
             }
 
             if (indiceSeleccionado != -1) {

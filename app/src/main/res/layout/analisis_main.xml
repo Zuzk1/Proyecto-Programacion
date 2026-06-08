@@ -1,10 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#121212"
     tools:context=".analisisActivity">
+
+    <ImageView
+        android:id="@+id/btnVolver"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:padding="12dp"
+        android:src="?attr/homeAsUpIndicator"
+        app:tint="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Análisis de Enfoque"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnVolver"
+        app:layout_constraintStart_toEndOf="@+id/btnVolver"
+        app:layout_constraintTop_toTopOf="@+id/btnVolver" />
+
+    <LinearLayout
+        android:id="@+id/llEstadisticas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/btnVolver">
+
+        <TextView
+            android:id="@+id/tvTiempoTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            tools:text="Tiempo de Enfoque Total: 18 hrs"
+            android:textColor="#A0A0A0"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvPomodorosCompletados"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            tools:text="Pomodoros Completados: 36"
+            android:textColor="#A0A0A0"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvRachaActual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            tools:text="Racha Actual: 7 Días (¡Pérdida en caso de Fallo!)"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvTasaFallos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Tasa de Fallos: 12% · Bloques Abandonados"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divisor1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="24dp"
+        android:background="#333333"
+        app:layout_constraintTop_toBottomOf="@+id/llEstadisticas" />
+
+    <LinearLayout
+        android:id="@+id/llTienda"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/divisor1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🪙"
+            android:textSize="28sp"
+            android:layout_marginEnd="12dp" />
+
+        <TextView
+            android:id="@+id/tvPuntos"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:text="350 Puntos"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnTienda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tienda de Temas"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:backgroundTint="#FFFFFF"
+            app:cornerRadius="24dp"
+            app:rippleColor="#DCDCDC" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divisor2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="16dp"
+        android:background="#333333"
+        app:layout_constraintTop_toBottomOf="@+id/llTienda" />
+
+    <TextView
+        android:id="@+id/tvTituloGrafica"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="Pomodoros Completados por Día"
+        android:textColor="#A0A0A0"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/divisor2" />
+
+    <LinearLayout
+        android:id="@+id/llGraficaContenedor"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/tvTituloGrafica">
+
+        <LinearLayout
+            android:id="@+id/llContenedorBarras"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:baselineAligned="false" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
