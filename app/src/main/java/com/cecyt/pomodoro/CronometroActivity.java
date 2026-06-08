@@ -53,6 +53,14 @@ public class CronometroActivity extends AppCompatActivity {
     private ValueAnimator ralentizador;
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if (estaCorriendo) {
+            startActivity(new android.content.Intent(this, alertaActivity.class));
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
