@@ -165,7 +165,7 @@ public class analisisActivity extends AppCompatActivity {
             columna.addView(areaBarra);
             columna.addView(tvDia);
             llContenedorBarras.addView(columna);
-            //Hola
+            //Holaa
         }
     }
 }

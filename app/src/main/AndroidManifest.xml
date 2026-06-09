@@ -44,6 +44,7 @@
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
 
+
         <activity
             android:name=".personalizacionActivity"
             android:exported="false"
