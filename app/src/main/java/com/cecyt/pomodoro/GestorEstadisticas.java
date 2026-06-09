@@ -33,7 +33,7 @@ public class GestorEstadisticas {
         editor.putInt("racha_actual", 0);
         editor.apply();
     }
-
+//hola
     public int getMinutosTotales() { return prefs.getInt("minutos_totales", 0); }
     public int getPomodorosCompletados() { return prefs.getInt("pomodoros_completados", 0); }
     public int getPomodorosFallados() { return prefs.getInt("pomodoros_fallados", 0); }

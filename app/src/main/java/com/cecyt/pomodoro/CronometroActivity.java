@@ -2,6 +2,7 @@ package com.cecyt.pomodoro;
 
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
@@ -82,8 +84,8 @@ public class CronometroActivity extends AppCompatActivity {
 
         botonRenunciar.setOnClickListener(v -> mostrarDialogoAdvertencia());
 
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        BottomNavigationMenuView menuView = (BottomNavigationMenuView) bottomNavigationView.getChildAt(0);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
@@ -93,12 +95,20 @@ public class CronometroActivity extends AppCompatActivity {
                 indiceSeleccionado = 0;
             } else if (itemId == R.id.nav_tareas) {
                 indiceSeleccionado = 1;
+                Intent intentTareas = new Intent(CronometroActivity.this, tareasActivity.class);
+                startActivity(intentTareas);
             } else if (itemId == R.id.nav_estadisticas) {
                 indiceSeleccionado = 2;
+                Intent intentEstadisticas = new Intent(CronometroActivity.this, analisisActivity.class);
+                startActivity(intentEstadisticas);
             }
 
             if (indiceSeleccionado != -1) {
-                animarIconoMenu(menuView, indiceSeleccionado);
+                // Usamos ViewGroup en lugar de la clase restringida de Google
+                ViewGroup menuViewAlt = (ViewGroup) bottomNavigationView.getChildAt(0);
+                if (menuViewAlt != null) {
+                    animarIconoMenu(menuViewAlt, indiceSeleccionado);
+                }
             }
             return true;
         });
@@ -116,20 +126,26 @@ public class CronometroActivity extends AppCompatActivity {
         animacionTexto.setRepeatCount(ObjectAnimator.INFINITE);
     }
 
-    private void animarIconoMenu(BottomNavigationMenuView menuView, int indiceSeleccionado) {
+
+    private void animarIconoMenu(ViewGroup menuView, int indiceSeleccionado) {
         if (animacionMenuActual != null) {
             animacionMenuActual.cancel();
         }
 
         for (int i = 0; i < menuView.getChildCount(); i++) {
-            menuView.getChildAt(i).setTranslationY(0f);
+            View child = menuView.getChildAt(i);
+            if (child != null) {
+                child.setTranslationY(0f);
+            }
         }
 
         View vistaIcono = menuView.getChildAt(indiceSeleccionado);
-        animacionMenuActual = ObjectAnimator.ofFloat(vistaIcono, "translationY", 0f, -15f, 0f);
-        animacionMenuActual.setDuration(2500);
-        animacionMenuActual.setRepeatCount(ObjectAnimator.INFINITE);
-        animacionMenuActual.start();
+        if (vistaIcono != null) {
+            animacionMenuActual = android.animation.ObjectAnimator.ofFloat(vistaIcono, "translationY", 0f, -15f, 0f);
+            animacionMenuActual.setDuration(2500);
+            animacionMenuActual.setRepeatCount(android.animation.ObjectAnimator.INFINITE);
+            animacionMenuActual.start();
+        }
     }
 
     private void iniciarCronometro() {
