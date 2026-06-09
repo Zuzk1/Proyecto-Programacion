@@ -1,0 +1,119 @@
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1A0A0A">
+
+    <View
+        android:id="@+id/viewGlowTop"
+        android:layout_width="320dp"
+        android:layout_height="320dp"
+        android:layout_marginTop="-80dp"
+        android:background="@drawable/glow_rojo"
+        android:alpha="0.6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivIconoAlerta"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="80dp"
+        android:src="@drawable/ic_alerta_escudo"
+        app:tint="#E53935"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvAlerta"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="¡INFRACCIÓN\nDE ENFOQUE!"
+        android:textColor="#FF5252"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.05"
+        android:lineSpacingMultiplier="1.1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivIconoAlerta" />
+
+    <View
+        android:id="@+id/viewDivider"
+        android:layout_width="48dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="16dp"
+        android:background="#E53935"
+        android:alpha="0.6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAlerta" />
+
+    <TextView
+        android:id="@+id/tvInstruccion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="48dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="Regresa a la app y mantén el botón para silenciar la alarma."
+        android:textColor="#FFCDD2"
+        android:textSize="15sp"
+        android:lineSpacingMultiplier="1.4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewDivider" />
+
+    <TextView
+        android:id="@+id/tvPenalizacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="6dp"
+        android:background="@drawable/bg_penalizacion"
+        android:text="Penalización activa — pérdida de puntos"
+        android:textColor="#FF8A80"
+        android:textSize="11sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvInstruccion" />
+
+    <Button
+        android:id="@+id/btnSilenciar"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginBottom="80dp"
+        android:backgroundTint="#B71C1C"
+        android:text="MANTÉN 15s"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.08"
+        app:cornerRadius="100dp"
+        app:elevation="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tvBtnHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:text="Mantén presionado para cancelar la sesión"
+        android:textColor="#B71C1C"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
