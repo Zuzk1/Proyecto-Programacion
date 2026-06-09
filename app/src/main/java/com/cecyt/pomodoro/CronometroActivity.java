@@ -1,6 +1,9 @@
 package com.cecyt.pomodoro;
 
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -24,6 +27,7 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 public class CronometroActivity extends AppCompatActivity {
 
     private boolean mantenerSplashScreen = true;
+    private boolean alertaYaLanzada = false;
     private CountDownTimer temporizador;
 
     private final long TIEMPO_ENFOQUE = 1500000;
@@ -47,6 +51,23 @@ public class CronometroActivity extends AppCompatActivity {
     private ObjectAnimator animacionBarra;
     private ObjectAnimator animacionTexto;
     private ObjectAnimator animacionMenuActual;
+
+    private ValueAnimator ralentizador;
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (estaCorriendo && !alertaYaLanzada) {
+            alertaYaLanzada = true;
+            startActivity(new android.content.Intent(this, alertaActivity.class));
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        alertaYaLanzada = false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +170,12 @@ public class CronometroActivity extends AppCompatActivity {
     }
 
     private void iniciarCronometro() {
+        if (ralentizador != null && ralentizador.isRunning()) {
+            ralentizador.cancel();
+        }
+
+        gatoAnimado.setSpeed(1f);
+
         temporizador = new CountDownTimer(tiempoRestante, 1000) {
             @Override
             public void onTick(long milisegundos) {
@@ -182,6 +209,21 @@ public class CronometroActivity extends AppCompatActivity {
         estaCorriendo = false;
         botonPausar.setImageResource(android.R.drawable.ic_media_play);
         gatoAnimado.pauseAnimation();
+
+        if (ralentizador != null && ralentizador.isRunning()) {
+            ralentizador.cancel();
+        }
+
+        ralentizador = ValueAnimator.ofFloat(gatoAnimado.getSpeed(), 0f);
+        ralentizador.setDuration(600);
+        ralentizador.addUpdateListener(anim -> gatoAnimado.setSpeed((float) anim.getAnimatedValue()));
+        ralentizador.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                gatoAnimado.pauseAnimation();
+            }
+        });
+        ralentizador.start();
 
         animacionBarra.pause();
         animacionTexto.pause();
@@ -249,7 +291,6 @@ public class CronometroActivity extends AppCompatActivity {
     private void restaurarIndicadoresGlobales() {
         int colorOscuro = Color.parseColor("#333333");
         int colorBlanco = Color.parseColor("#FFFFFF");
-
         tvCiclo1.setBackgroundTintList(ColorStateList.valueOf(colorOscuro));
         tvCiclo1.setTextColor(colorBlanco);
         tvCiclo2.setBackgroundTintList(ColorStateList.valueOf(colorOscuro));
@@ -284,7 +325,6 @@ public class CronometroActivity extends AppCompatActivity {
 
         tvTitulo.setText("SESIÓN DE ENFOQUE");
         barraProgreso.setIndicatorColor(Color.parseColor("#FFFFFF"));
-
         barraProgreso.setMax((int) TIEMPO_ENFOQUE);
         restaurarIndicadoresGlobales();
         configurarIndicadorActual(cicloActual);
@@ -296,9 +336,7 @@ public class CronometroActivity extends AppCompatActivity {
     private void actualizarInterfaz() {
         int minutos = (int) (tiempoRestante / 1000) / 60;
         int segundos = (int) (tiempoRestante / 1000) % 60;
-
-        String formato = String.format("%02d:%02d", minutos, segundos);
-        textoTiempo.setText(formato);
+        textoTiempo.setText(String.format("%02d:%02d", minutos, segundos));
         barraProgreso.setProgress((int) tiempoRestante);
     }
 
