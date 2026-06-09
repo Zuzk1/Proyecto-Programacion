@@ -23,7 +23,7 @@ public class OnboardingAdapterActivity extends RecyclerView.Adapter<OnboardingAd
     };
 
     private final int[] animaciones = {
-            R.raw.gato_asoma,
+            R.raw.gatos_rueda,
             R.raw.gato_dormido,
             R.raw.gato_asoma
     };
