@@ -15,7 +15,7 @@
         android:layout_width="180dp"
         android:layout_height="180dp"
         android:background="@drawable/circulos_decorativos"
-        android:alpha="0.07"
+        android:alpha="0.20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginEnd="-60dp"
@@ -27,7 +27,7 @@
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:background="@drawable/circulos_decorativos"
-        android:alpha="0.07"
+        android:alpha="0.20"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginStart="-40dp"
@@ -36,36 +36,38 @@
     <!-- Nombre de la app -->
     <TextView
         android:id="@+id/tvTituloApp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="277dp"
+        android:layout_height="75dp"
         android:layout_marginTop="48dp"
         android:fontFamily="serif"
+        android:gravity="center"
+        android:letterSpacing="0.08"
         android:text="Miau Focus"
         android:textColor="#FFFFFF"
-        android:textSize="28sp"
+        android:textSize="40sp"
         android:textStyle="bold"
-        android:letterSpacing="0.08"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Chip / badge "POMODORO" -->
     <TextView
         android:id="@+id/tvBadge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="127dp"
+        android:layout_height="24dp"
         android:layout_marginTop="6dp"
         android:background="@drawable/chip_pomodoro"
+        android:letterSpacing="0.15"
         android:paddingHorizontal="14dp"
         android:paddingVertical="4dp"
         android:text="POMODORO"
+        android:gravity="center"
         android:textColor="#FF1744"
-        android:textSize="10sp"
+        android:textSize="13sp"
         android:textStyle="bold"
-        android:letterSpacing="0.15"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTituloApp"/>
+        app:layout_constraintTop_toBottomOf="@+id/tvTituloApp" />
 
     <!-- Contenedor circular del Lottie -->
     <androidx.cardview.widget.CardView
