@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#1F1F24"
-    tools:context=".BienvenidaActivity">
+    tools:context=".bienvenidaActivity">
 
     <!-- Círculo decorativo superior derecho -->
     <View
