@@ -13,11 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class analisisActivity extends AppCompatActivity {
 
@@ -28,26 +24,16 @@ public class analisisActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         try {
-            EdgeToEdge.enable(this);
             setContentView(R.layout.analisis_main);
 
-            ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-                return insets;
-            });
-
-            // Inicializar el gestor de base de datos local
             gestor = new GestorEstadisticas(this);
 
             configurarBotonVolver();
             cargarDatosReales();
 
-            // Extraer los datos de la semana y dibujar la gráfica
             int[] datosPomodorosSemana = gestor.getDatosSemana();
             dibujarGraficaDeBarras(datosPomodorosSemana);
 
-            // Conectar el botón de Tienda a la Actividad de Personalización
             findViewById(R.id.btnTienda).setOnClickListener(v -> {
                 Intent intent = new Intent(analisisActivity.this, personalizacionActivity.class);
                 startActivity(intent);
@@ -66,17 +52,14 @@ public class analisisActivity extends AppCompatActivity {
         int racha = gestor.getRachaActual();
         int puntos = gestor.getPuntos();
 
-        // Formatear Tiempo Total (Horas y Minutos)
         int horas = minutosTotales / 60;
         int minutosRestantes = minutosTotales % 60;
         String textoTiempo = "Tiempo de Enfoque Total: " + horas + " hrs " + minutosRestantes + " min";
         ((TextView) findViewById(R.id.tvTiempoTotal)).setText(textoTiempo);
 
-        // Imprimir Pomodoros y Puntos
         ((TextView) findViewById(R.id.tvPomodorosCompletados)).setText("Pomodoros Completados: " + completados);
         ((TextView) findViewById(R.id.tvPuntos)).setText(puntos + " Puntos");
 
-        // Formatear Racha (Gris + Rojo)
         TextView tvRacha = findViewById(R.id.tvRachaActual);
         String textoRacha = "Racha Actual: " + racha + " Días (¡Pérdida en caso de Fallo!)";
         SpannableString spannableRacha = new SpannableString(textoRacha);
@@ -88,7 +71,6 @@ public class analisisActivity extends AppCompatActivity {
         }
         tvRacha.setText(spannableRacha);
 
-        // Calcular y Formatear Tasa de Fallos
         float porcentajeFallo = 0;
         int intentosTotales = completados + fallos;
         if (intentosTotales > 0) {
@@ -114,7 +96,6 @@ public class analisisActivity extends AppCompatActivity {
     }
 
     private void dibujarGraficaDeBarras(int[] datos) {
-        // Validación de seguridad para que nunca explote si la base de datos está vacía
         if (datos == null || datos.length == 0) {
             datos = new int[]{0, 0, 0, 0, 0, 0, 0};
         }
