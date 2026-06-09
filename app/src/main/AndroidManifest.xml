@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -11,42 +11,48 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.App.Starting">
+
+        <activity
+            android:name=".bienvenidaActivity"
+            android:exported="false" />
         <activity
             android:name=".CronometroActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".tareas_pomodoro"
-            android:exported="false"
-            android:label="@string/title_activity_tareas_pomodoro"
-            android:theme="@style/Theme.App.Starting"
-            android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".tareasActivity"
             android:exported="true"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".alertaActivity"
             android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".analisisActivity"
             android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
+
+
+
         <activity
             android:name=".personalizacionActivity"
             android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
     </application>
 

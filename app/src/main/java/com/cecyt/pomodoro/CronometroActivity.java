@@ -1,7 +1,11 @@
 package com.cecyt.pomodoro;
 
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,12 +13,10 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
-import android.animation.ValueAnimator;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
@@ -25,6 +27,7 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 public class CronometroActivity extends AppCompatActivity {
 
     private boolean mantenerSplashScreen = true;
+    private boolean alertaYaLanzada = false;
     private CountDownTimer temporizador;
 
     private final long TIEMPO_ENFOQUE = 1500000;
@@ -49,15 +52,21 @@ public class CronometroActivity extends AppCompatActivity {
     private ObjectAnimator animacionTexto;
     private ObjectAnimator animacionMenuActual;
 
-    // Declaracion del ralentizador a nivel de clase
     private ValueAnimator ralentizador;
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (estaCorriendo) {
+        if (estaCorriendo && !alertaYaLanzada) {
+            alertaYaLanzada = true;
             startActivity(new android.content.Intent(this, alertaActivity.class));
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        alertaYaLanzada = false;
     }
 
     @Override
@@ -73,9 +82,6 @@ public class CronometroActivity extends AppCompatActivity {
         tvTitulo = findViewById(R.id.tvTitulo);
         barraProgreso = findViewById(R.id.pbCronometro);
         botonPausar = findViewById(R.id.btnPausar);
-
-        botonPausar.setImageResource(android.R.drawable.ic_media_play);
-
         botonRenunciar = findViewById(R.id.btnRenunciar);
         gatoAnimado = findViewById(R.id.lottieGato);
 
@@ -99,8 +105,8 @@ public class CronometroActivity extends AppCompatActivity {
 
         botonRenunciar.setOnClickListener(v -> mostrarDialogoAdvertencia());
 
+//holaA
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        BottomNavigationMenuView menuView = (BottomNavigationMenuView) bottomNavigationView.getChildAt(0);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
@@ -110,12 +116,20 @@ public class CronometroActivity extends AppCompatActivity {
                 indiceSeleccionado = 0;
             } else if (itemId == R.id.nav_tareas) {
                 indiceSeleccionado = 1;
+                Intent intentTareas = new Intent(CronometroActivity.this, tareasActivity.class);
+                startActivity(intentTareas);
             } else if (itemId == R.id.nav_estadisticas) {
                 indiceSeleccionado = 2;
+                Intent intentEstadisticas = new Intent(CronometroActivity.this, analisisActivity.class);
+                startActivity(intentEstadisticas);
             }
 
             if (indiceSeleccionado != -1) {
-                animarIconoMenu(menuView, indiceSeleccionado);
+                // Usamos ViewGroup en lugar de la clase restringida de Google
+                ViewGroup menuViewAlt = (ViewGroup) bottomNavigationView.getChildAt(0);
+                if (menuViewAlt != null) {
+                    animarIconoMenu(menuViewAlt, indiceSeleccionado);
+                }
             }
             return true;
         });
@@ -133,24 +147,29 @@ public class CronometroActivity extends AppCompatActivity {
         animacionTexto.setRepeatCount(ObjectAnimator.INFINITE);
     }
 
-    private void animarIconoMenu(BottomNavigationMenuView menuView, int indiceSeleccionado) {
+
+    private void animarIconoMenu(ViewGroup menuView, int indiceSeleccionado) {
         if (animacionMenuActual != null) {
             animacionMenuActual.cancel();
         }
 
         for (int i = 0; i < menuView.getChildCount(); i++) {
-            menuView.getChildAt(i).setTranslationY(0f);
+            View child = menuView.getChildAt(i);
+            if (child != null) {
+                child.setTranslationY(0f);
+            }
         }
 
         View vistaIcono = menuView.getChildAt(indiceSeleccionado);
-        animacionMenuActual = ObjectAnimator.ofFloat(vistaIcono, "translationY", 0f, -15f, 0f);
-        animacionMenuActual.setDuration(2500);
-        animacionMenuActual.setRepeatCount(ObjectAnimator.INFINITE);
-        animacionMenuActual.start();
+        if (vistaIcono != null) {
+            animacionMenuActual = android.animation.ObjectAnimator.ofFloat(vistaIcono, "translationY", 0f, -15f, 0f);
+            animacionMenuActual.setDuration(2500);
+            animacionMenuActual.setRepeatCount(android.animation.ObjectAnimator.INFINITE);
+            animacionMenuActual.start();
+        }
     }
 
     private void iniciarCronometro() {
-
         if (ralentizador != null && ralentizador.isRunning()) {
             ralentizador.cancel();
         }
@@ -172,8 +191,7 @@ public class CronometroActivity extends AppCompatActivity {
 
         estaCorriendo = true;
         botonPausar.setImageResource(android.R.drawable.ic_media_pause);
-
-        gatoAnimado.resumeAnimation();
+        gatoAnimado.playAnimation();
 
         if (animacionBarra.isPaused()) {
             animacionBarra.resume();
@@ -190,6 +208,7 @@ public class CronometroActivity extends AppCompatActivity {
         }
         estaCorriendo = false;
         botonPausar.setImageResource(android.R.drawable.ic_media_play);
+        gatoAnimado.pauseAnimation();
 
         if (ralentizador != null && ralentizador.isRunning()) {
             ralentizador.cancel();
@@ -197,10 +216,7 @@ public class CronometroActivity extends AppCompatActivity {
 
         ralentizador = ValueAnimator.ofFloat(gatoAnimado.getSpeed(), 0f);
         ralentizador.setDuration(600);
-        ralentizador.addUpdateListener(anim -> {
-            gatoAnimado.setSpeed((float) anim.getAnimatedValue());
-        });
-
+        ralentizador.addUpdateListener(anim -> gatoAnimado.setSpeed((float) anim.getAnimatedValue()));
         ralentizador.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -275,7 +291,6 @@ public class CronometroActivity extends AppCompatActivity {
     private void restaurarIndicadoresGlobales() {
         int colorOscuro = Color.parseColor("#333333");
         int colorBlanco = Color.parseColor("#FFFFFF");
-
         tvCiclo1.setBackgroundTintList(ColorStateList.valueOf(colorOscuro));
         tvCiclo1.setTextColor(colorBlanco);
         tvCiclo2.setBackgroundTintList(ColorStateList.valueOf(colorOscuro));
@@ -310,7 +325,6 @@ public class CronometroActivity extends AppCompatActivity {
 
         tvTitulo.setText("SESIÓN DE ENFOQUE");
         barraProgreso.setIndicatorColor(Color.parseColor("#FFFFFF"));
-
         barraProgreso.setMax((int) TIEMPO_ENFOQUE);
         restaurarIndicadoresGlobales();
         configurarIndicadorActual(cicloActual);
@@ -322,9 +336,7 @@ public class CronometroActivity extends AppCompatActivity {
     private void actualizarInterfaz() {
         int minutos = (int) (tiempoRestante / 1000) / 60;
         int segundos = (int) (tiempoRestante / 1000) % 60;
-
-        String formato = String.format("%02d:%02d", minutos, segundos);
-        textoTiempo.setText(formato);
+        textoTiempo.setText(String.format("%02d:%02d", minutos, segundos));
         barraProgreso.setProgress((int) tiempoRestante);
     }
 
