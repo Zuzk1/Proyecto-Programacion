@@ -84,7 +84,7 @@ public class CronometroActivity extends AppCompatActivity {
 
         botonRenunciar.setOnClickListener(v -> mostrarDialogoAdvertencia());
 
-//hola
+//holaA
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {

@@ -45,6 +45,7 @@
             android:windowSoftInputMode="adjustResize" />
 
 
+
         <activity
             android:name=".personalizacionActivity"
             android:exported="false"

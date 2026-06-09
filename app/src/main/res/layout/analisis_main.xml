@@ -27,6 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/an_lisis_de_enfoque"
+
         android:textColor="#FFFFFF"
         android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="@+id/btnVolver"
