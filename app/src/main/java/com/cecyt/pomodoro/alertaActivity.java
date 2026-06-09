@@ -1,44 +1,149 @@
 package com.cecyt.pomodoro;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.graphics.Color;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 public class alertaActivity extends AppCompatActivity {
 
     private CountDownTimer contador;
     private Button btnSilenciar;
     private View viewGlowTop;
+    private CircularProgressIndicator pbProgresoSilenciar;
+    private Ringtone ringtone;
+    private boolean isBotonPresionado = false;
+
+    // Variables para controlar las animaciones de la barra
+    private ObjectAnimator animacionProgresoFadeIn;
+    private ObjectAnimator animacionProgresoFadeOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         this.setFinishOnTouchOutside(false);
-
         setContentView(R.layout.alerta_main);
 
         btnSilenciar = findViewById(R.id.btnSilenciar);
         viewGlowTop = findViewById(R.id.viewGlowTop);
+        pbProgresoSilenciar = findViewById(R.id.pbProgresoSilenciar);
+
+        pbProgresoSilenciar.setAlpha(0f);
+        pbProgresoSilenciar.setVisibility(View.INVISIBLE);
 
         animarAura();
+        reproducirAlarma();
 
         btnSilenciar.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                iniciarContador();
+                isBotonPresionado = true;
+                mostrarProgresoGradual();
+                transicionTexto("CANCELANDO...\n5s", () -> {
+                    if (isBotonPresionado) {
+                        iniciarContador();
+                    }
+                });
             } else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                isBotonPresionado = false;
                 if (contador != null) {
                     contador.cancel();
                     contador = null;
                 }
-                btnSilenciar.setText("MANTÉN 5s");
+                ocultarProgresoGradual();
+                transicionTexto("MANTÉN 5s", null);
             }
             return true;
         });
+    }
+
+    private void reproducirAlarma() {
+        Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        if (alert == null) {
+            alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+            if (alert == null) {
+                alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            }
+        }
+        ringtone = RingtoneManager.getRingtone(getApplicationContext(), alert);
+        if (ringtone != null) {
+            ringtone.play();
+        }
+    }
+
+    private void detenerAlarma() {
+        if (ringtone != null && ringtone.isPlaying()) {
+            ringtone.stop();
+        }
+    }
+
+    private void transicionTexto(String nuevoTexto, Runnable accionAlTerminarFondo) {
+        ObjectAnimator fadeOut = ObjectAnimator.ofArgb(btnSilenciar, "textColor", Color.WHITE, Color.TRANSPARENT);
+        fadeOut.setDuration(120);
+        fadeOut.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                btnSilenciar.setText(nuevoTexto);
+                if (accionAlTerminarFondo != null) {
+                    accionAlTerminarFondo.run();
+                }
+                ObjectAnimator fadeIn = ObjectAnimator.ofArgb(btnSilenciar, "textColor", Color.TRANSPARENT, Color.WHITE);
+                fadeIn.setDuration(120);
+                fadeIn.start();
+            }
+        });
+        fadeOut.start();
+    }
+
+    private void mostrarProgresoGradual() {
+        if (animacionProgresoFadeOut != null && animacionProgresoFadeOut.isRunning()) {
+            animacionProgresoFadeOut.cancel();
+        }
+
+        pbProgresoSilenciar.setVisibility(View.VISIBLE);
+        animacionProgresoFadeIn = ObjectAnimator.ofFloat(pbProgresoSilenciar, "alpha", pbProgresoSilenciar.getAlpha(), 1f);
+        animacionProgresoFadeIn.setDuration(240);
+        animacionProgresoFadeIn.start();
+
+        ObjectAnimator scaleDownX = ObjectAnimator.ofFloat(btnSilenciar, "scaleX", 1.0f, 0.95f);
+        ObjectAnimator scaleDownY = ObjectAnimator.ofFloat(btnSilenciar, "scaleY", 1.0f, 0.95f);
+        scaleDownX.setDuration(240);
+        scaleDownY.setDuration(240);
+        scaleDownX.start();
+        scaleDownY.start();
+    }
+
+    private void ocultarProgresoGradual() {
+        if (animacionProgresoFadeIn != null && animacionProgresoFadeIn.isRunning()) {
+            animacionProgresoFadeIn.cancel();
+        }
+
+        animacionProgresoFadeOut = ObjectAnimator.ofFloat(pbProgresoSilenciar, "alpha", pbProgresoSilenciar.getAlpha(), 0f);
+        animacionProgresoFadeOut.setDuration(240);
+        animacionProgresoFadeOut.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                pbProgresoSilenciar.setVisibility(View.INVISIBLE);
+                pbProgresoSilenciar.setProgress(0);
+            }
+        });
+        animacionProgresoFadeOut.start();
+
+        ObjectAnimator scaleUpX = ObjectAnimator.ofFloat(btnSilenciar, "scaleX", 0.95f, 1.0f);
+        ObjectAnimator scaleUpY = ObjectAnimator.ofFloat(btnSilenciar, "scaleY", 0.95f, 1.0f);
+        scaleUpX.setDuration(240);
+        scaleUpY.setDuration(240);
+        scaleUpX.start();
+        scaleUpY.start();
     }
 
     private void animarAura() {
@@ -68,15 +173,36 @@ public class alertaActivity extends AppCompatActivity {
             contador.cancel();
         }
 
-        contador = new CountDownTimer(5000, 1000) {
+        contador = new CountDownTimer(5000, 50) {
+            int ciclosPuntos = 0;
+
             @Override
             public void onTick(long millisUntilFinished) {
-                long segundosRestantes = millisUntilFinished / 1000;
-                btnSilenciar.setText("CANCELANDO... " + segundosRestantes + "s");
+                long tiempoTranscurrido = 5000 - millisUntilFinished;
+                pbProgresoSilenciar.setProgress((int) tiempoTranscurrido);
+
+                long segundosRestantes = (millisUntilFinished / 1000) + 1;
+
+                String puntos = "";
+                if (ciclosPuntos % 3 == 0) {
+                    puntos = ".";
+                } else if (ciclosPuntos % 3 == 1) {
+                    puntos = "..";
+                } else {
+                    puntos = "...";
+                }
+
+                if (tiempoTranscurrido % 500 < 50) {
+                    ciclosPuntos++;
+                }
+
+                btnSilenciar.setText("CANCELANDO" + puntos + "\n" + segundosRestantes + "s");
             }
 
             @Override
             public void onFinish() {
+                pbProgresoSilenciar.setProgress(5000);
+                detenerAlarma();
                 finish();
             }
         }.start();
@@ -89,5 +215,6 @@ public class alertaActivity extends AppCompatActivity {
             contador.cancel();
             contador = null;
         }
+        detenerAlarma();
     }
 }
