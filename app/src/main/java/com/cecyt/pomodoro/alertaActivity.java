@@ -1,24 +1,41 @@
 package com.cecyt.pomodoro;
 
 import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
+import android.os.CountDownTimer;
+import android.view.MotionEvent;
+import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class alertaActivity extends AppCompatActivity {
+    private CountDownTimer contador;
+    private Button btnSilenciar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.alerta_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        btnSilenciar = findViewById(R.id.btnSilenciar);
+
+        btnSilenciar.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                iniciarContador();
+            } else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                if (contador != null) contador.cancel();
+            }
+            return true;
         });
+    }
+
+    private void iniciarContador() {
+        contador = new CountDownTimer(15000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {}
+
+            @Override
+            public void onFinish() {
+                finish();
+            }
+        }.start();
     }
 }
