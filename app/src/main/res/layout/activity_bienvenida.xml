@@ -46,15 +46,15 @@
 
     <TextView
         android:id="@+id/tvBadge"
-        android:layout_width="127dp"
-        android:layout_height="24dp"
+        android:layout_width="132dp"
+        android:layout_height="28dp"
         android:layout_marginTop="6dp"
         android:background="@drawable/chip_pomodoro"
+        android:gravity="center"
         android:letterSpacing="0.15"
         android:paddingHorizontal="14dp"
         android:paddingVertical="4dp"
         android:text="POMODORO"
-        android:gravity="center"
         android:textColor="#64B5F6"
         android:textSize="13sp"
         android:textStyle="bold"
