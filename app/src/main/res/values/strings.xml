@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Miau Focus</string>
     <string name="title_activity_tareas_pomodoro">tareas_pomodoro</string>
+    <string name="an_lisis_de_enfoque">Análisis de Enfoque</string>
 </resources>

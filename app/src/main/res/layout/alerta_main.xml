@@ -30,6 +30,8 @@
         app:tint="#E53935" />
 
     <TextView
+
+
         android:id="@+id/tvAlerta"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
