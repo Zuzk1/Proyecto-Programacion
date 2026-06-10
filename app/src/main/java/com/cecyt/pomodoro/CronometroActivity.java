@@ -1,5 +1,6 @@
 package com.cecyt.pomodoro;
 
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.animation.Animator;
@@ -14,12 +15,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
@@ -54,6 +56,12 @@ public class CronometroActivity extends AppCompatActivity {
 
     private ValueAnimator ralentizador;
 
+    private Handler handlerCiclos = new Handler(Looper.getMainLooper());
+    private Runnable runnableCiclos;
+    private static final long INTERVALO_ANIMACION_CICLOS = 10000;
+
+    private BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -67,6 +75,12 @@ public class CronometroActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         alertaYaLanzada = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handlerCiclos.removeCallbacks(runnableCiclos);
     }
 
     @Override
@@ -94,6 +108,7 @@ public class CronometroActivity extends AppCompatActivity {
         barraProgreso.setProgress((int) tiempoRestante);
 
         configurarAnimaciones();
+        animarCirculos();
 
         botonPausar.setOnClickListener(v -> {
             if (estaCorriendo) {
@@ -105,8 +120,7 @@ public class CronometroActivity extends AppCompatActivity {
 
         botonRenunciar.setOnClickListener(v -> mostrarDialogoAdvertencia());
 
-//holaA
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
@@ -116,16 +130,13 @@ public class CronometroActivity extends AppCompatActivity {
                 indiceSeleccionado = 0;
             } else if (itemId == R.id.nav_tareas) {
                 indiceSeleccionado = 1;
-                Intent intentTareas = new Intent(CronometroActivity.this, tareasActivity.class);
-                startActivity(intentTareas);
+                startActivity(new Intent(CronometroActivity.this, tareasActivity.class));
             } else if (itemId == R.id.nav_estadisticas) {
                 indiceSeleccionado = 2;
-                Intent intentEstadisticas = new Intent(CronometroActivity.this, analisisActivity.class);
-                startActivity(intentEstadisticas);
+                startActivity(new Intent(CronometroActivity.this, analisisActivity.class));
             }
 
             if (indiceSeleccionado != -1) {
-                // Usamos ViewGroup en lugar de la clase restringida de Google
                 ViewGroup menuViewAlt = (ViewGroup) bottomNavigationView.getChildAt(0);
                 if (menuViewAlt != null) {
                     animarIconoMenu(menuViewAlt, indiceSeleccionado);
@@ -135,6 +146,94 @@ public class CronometroActivity extends AppCompatActivity {
         });
 
         bottomNavigationView.setSelectedItemId(R.id.nav_enfoque);
+    }
+
+    private void habilitarNavegacion(boolean habilitar) {
+        for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
+            bottomNavigationView.getMenu().getItem(i).setEnabled(habilitar);
+        }
+    }
+
+    private void animarCirculos() {
+        View circleTopLeft = findViewById(R.id.circleTopLeft);
+        View circleBottomRight = findViewById(R.id.circleBottomRight);
+        if (circleTopLeft != null) iniciarPulso(circleTopLeft, 4500, 0);
+        if (circleBottomRight != null) iniciarPulso(circleBottomRight, 5500, 1500);
+    }
+
+    private void iniciarPulso(View vista, long duracion, long delay) {
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(vista, "scaleX", 1f, 1.2f, 1f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(vista, "scaleY", 1f, 1.2f, 1f);
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(vista, "alpha", 0.13f, 0.28f, 0.13f);
+
+        scaleX.setDuration(duracion);
+        scaleY.setDuration(duracion);
+        alpha.setDuration(duracion);
+
+        scaleX.setRepeatCount(ObjectAnimator.INFINITE);
+        scaleY.setRepeatCount(ObjectAnimator.INFINITE);
+        alpha.setRepeatCount(ObjectAnimator.INFINITE);
+
+        AccelerateDecelerateInterpolator interp = new AccelerateDecelerateInterpolator();
+        scaleX.setInterpolator(interp);
+        scaleY.setInterpolator(interp);
+        alpha.setInterpolator(interp);
+
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(scaleX, scaleY, alpha);
+        set.setStartDelay(delay);
+        set.start();
+    }
+
+    private void iniciarCicloAnimacionCiclos() {
+        runnableCiclos = new Runnable() {
+            @Override
+            public void run() {
+                animarCiclosEnCascada();
+                handlerCiclos.postDelayed(this, INTERVALO_ANIMACION_CICLOS);
+            }
+        };
+        handlerCiclos.postDelayed(runnableCiclos, INTERVALO_ANIMACION_CICLOS);
+    }
+
+    private void animarCiclosEnCascada() {
+        TextView[] ciclos = {tvCiclo1, tvCiclo2, tvCiclo3, tvCiclo4};
+        long delayBase = 0;
+
+        for (TextView ciclo : ciclos) {
+            if (ciclo == null) continue;
+            long delay = delayBase;
+
+            ObjectAnimator scaleUpX = ObjectAnimator.ofFloat(ciclo, "scaleX", 1f, 1.35f);
+            ObjectAnimator scaleUpY = ObjectAnimator.ofFloat(ciclo, "scaleY", 1f, 1.35f);
+            ObjectAnimator translateUp = ObjectAnimator.ofFloat(ciclo, "translationY", 0f, -18f);
+
+            scaleUpX.setDuration(350);
+            scaleUpY.setDuration(350);
+            translateUp.setDuration(350);
+            translateUp.setInterpolator(new OvershootInterpolator(2f));
+
+            AnimatorSet subida = new AnimatorSet();
+            subida.playTogether(scaleUpX, scaleUpY, translateUp);
+
+            ObjectAnimator scaleDownX = ObjectAnimator.ofFloat(ciclo, "scaleX", 1.35f, 1f);
+            ObjectAnimator scaleDownY = ObjectAnimator.ofFloat(ciclo, "scaleY", 1.35f, 1f);
+            ObjectAnimator translateDown = ObjectAnimator.ofFloat(ciclo, "translationY", -18f, 0f);
+
+            scaleDownX.setDuration(400);
+            scaleDownY.setDuration(400);
+            translateDown.setDuration(400);
+
+            AnimatorSet bajada = new AnimatorSet();
+            bajada.playTogether(scaleDownX, scaleDownY, translateDown);
+
+            AnimatorSet brinco = new AnimatorSet();
+            brinco.playSequentially(subida, bajada);
+            brinco.setStartDelay(delay);
+            brinco.start();
+
+            delayBase += 200;
+        }
     }
 
     private void configurarAnimaciones() {
@@ -147,7 +246,6 @@ public class CronometroActivity extends AppCompatActivity {
         animacionTexto.setRepeatCount(ObjectAnimator.INFINITE);
     }
 
-
     private void animarIconoMenu(ViewGroup menuView, int indiceSeleccionado) {
         if (animacionMenuActual != null) {
             animacionMenuActual.cancel();
@@ -155,16 +253,14 @@ public class CronometroActivity extends AppCompatActivity {
 
         for (int i = 0; i < menuView.getChildCount(); i++) {
             View child = menuView.getChildAt(i);
-            if (child != null) {
-                child.setTranslationY(0f);
-            }
+            if (child != null) child.setTranslationY(0f);
         }
 
         View vistaIcono = menuView.getChildAt(indiceSeleccionado);
         if (vistaIcono != null) {
-            animacionMenuActual = android.animation.ObjectAnimator.ofFloat(vistaIcono, "translationY", 0f, -15f, 0f);
+            animacionMenuActual = ObjectAnimator.ofFloat(vistaIcono, "translationY", 0f, -15f, 0f);
             animacionMenuActual.setDuration(2500);
-            animacionMenuActual.setRepeatCount(android.animation.ObjectAnimator.INFINITE);
+            animacionMenuActual.setRepeatCount(ObjectAnimator.INFINITE);
             animacionMenuActual.start();
         }
     }
@@ -175,6 +271,10 @@ public class CronometroActivity extends AppCompatActivity {
         }
 
         gatoAnimado.setSpeed(1f);
+
+        handlerCiclos.removeCallbacks(runnableCiclos);
+        iniciarCicloAnimacionCiclos();
+        habilitarNavegacion(false);
 
         temporizador = new CountDownTimer(tiempoRestante, 1000) {
             @Override
@@ -203,6 +303,9 @@ public class CronometroActivity extends AppCompatActivity {
     }
 
     private void pausarCronometro() {
+        handlerCiclos.removeCallbacks(runnableCiclos);
+        habilitarNavegacion(true);
+
         if (temporizador != null) {
             temporizador.cancel();
         }
@@ -230,6 +333,9 @@ public class CronometroActivity extends AppCompatActivity {
     }
 
     private void procesarFinDeCiclo() {
+        handlerCiclos.removeCallbacks(runnableCiclos);
+        habilitarNavegacion(true);
+
         estaCorriendo = false;
         botonPausar.setImageResource(android.R.drawable.ic_media_play);
         detenerYRestablecerAnimaciones();
@@ -311,6 +417,9 @@ public class CronometroActivity extends AppCompatActivity {
     }
 
     private void reiniciarCronometro() {
+        handlerCiclos.removeCallbacks(runnableCiclos);
+        habilitarNavegacion(true);
+
         if (temporizador != null) {
             temporizador.cancel();
         }

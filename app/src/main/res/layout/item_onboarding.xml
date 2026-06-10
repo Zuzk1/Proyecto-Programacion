@@ -35,6 +35,7 @@
         android:gravity="center"
         android:textColor="#FFFFFF"
         android:textSize="22sp"
+        android:fontFamily="@font/poppins_regular"
         android:textStyle="bold"
         android:lineSpacingExtra="4dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,6 +52,7 @@
         android:lineSpacingExtra="4dp"
         android:textColor="#99FFFFFF"
         android:textSize="14sp"
+        android:fontFamily="@font/poppins_regular"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvHeadline" />

@@ -1,9 +1,12 @@
 package com.cecyt.pomodoro;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
@@ -15,7 +18,6 @@ public class bienvenidaActivity extends AppCompatActivity {
     private LinearLayout dotsContainer;
     private MaterialButton btnComenzar;
     private SharedPreferences preferencias;
-
     private View[] dots;
     private final int TOTAL_PAGINAS = 3;
 
@@ -41,6 +43,7 @@ public class bienvenidaActivity extends AppCompatActivity {
 
         configurarDots();
         actualizarDots(0);
+        animarCirculos();
 
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -63,6 +66,41 @@ public class bienvenidaActivity extends AppCompatActivity {
                 iniciarCronometro();
             }
         });
+    }
+
+    private void animarCirculos() {
+        View circleTopRight = findViewById(R.id.circleTopRight);
+        View circleBottomLeft = findViewById(R.id.circleBottomLeft);
+
+        AnimatorSet pulsoTop = crearPulso(circleTopRight, 4000, 0);
+        AnimatorSet pulsoBottom = crearPulso(circleBottomLeft, 5000, 1200);
+
+        pulsoTop.start();
+        pulsoBottom.start();
+    }
+
+    private AnimatorSet crearPulso(View vista, long duracion, long delay) {
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(vista, "scaleX", 1f, 1.18f, 1f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(vista, "scaleY", 1f, 1.18f, 1f);
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(vista, "alpha", 0.20f, 0.38f, 0.20f);
+
+        scaleX.setDuration(duracion);
+        scaleY.setDuration(duracion);
+        alpha.setDuration(duracion);
+
+        scaleX.setRepeatCount(ObjectAnimator.INFINITE);
+        scaleY.setRepeatCount(ObjectAnimator.INFINITE);
+        alpha.setRepeatCount(ObjectAnimator.INFINITE);
+
+        AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
+        scaleX.setInterpolator(interpolator);
+        scaleY.setInterpolator(interpolator);
+        alpha.setInterpolator(interpolator);
+
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(scaleX, scaleY, alpha);
+        set.setStartDelay(delay);
+        return set;
     }
 
     private void configurarDots() {
