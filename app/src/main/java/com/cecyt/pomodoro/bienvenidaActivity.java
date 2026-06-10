@@ -37,7 +37,7 @@ public class bienvenidaActivity extends AppCompatActivity {
         dotsContainer = findViewById(R.id.dotsContainer);
         btnComenzar = findViewById(R.id.btnComenzar);
 
-        viewPager.setAdapter(new OnboardingAdapterActivity());
+
 
         configurarDots();
         actualizarDots(0);
