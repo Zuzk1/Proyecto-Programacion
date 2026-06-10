@@ -28,12 +28,6 @@
             android:exported="false"
             android:theme="@style/Theme.App.Starting" />
         <activity
-            android:name=".tareas_pomodoro"
-            android:exported="false"
-            android:label="@string/title_activity_tareas_pomodoro"
-            android:theme="@style/Theme.App.Starting"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name=".tareasActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
@@ -53,10 +47,6 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".configuracionesAppActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".OnboardingAdapterActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
     </application>
