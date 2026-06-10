@@ -1,0 +1,5 @@
+com.cecyt.pomodoro.test.app-updated_navigation_xml-0 /home/zuzk1/StudioProjects/Proyecto-Programacion/app/build/generated/updated_navigation_xml/debugAndroidTest
+com.cecyt.pomodoro.test.app-packageDebugAndroidTestResources-1 /home/zuzk1/StudioProjects/Proyecto-Programacion/app/build/intermediates/incremental/debugAndroidTest/packageDebugAndroidTestResources/merged.dir
+com.cecyt.pomodoro.test.app-packageDebugAndroidTestResources-2 /home/zuzk1/StudioProjects/Proyecto-Programacion/app/build/intermediates/incremental/debugAndroidTest/packageDebugAndroidTestResources/stripped.dir
+com.cecyt.pomodoro.test.app-debugAndroidTest-3 /home/zuzk1/StudioProjects/Proyecto-Programacion/app/build/intermediates/merged_res/debugAndroidTest/mergeDebugAndroidTestResources
+gradleHome-0 /home/zuzk1/.gradle

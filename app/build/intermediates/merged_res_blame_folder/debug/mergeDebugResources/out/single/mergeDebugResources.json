@@ -1,0 +1,222 @@
+[
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/raw_gato_observa.json.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/raw/gato_observa.json"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/drawable_ciclo_activo.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/drawable/ciclo_activo.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/mipmap-xhdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/mipmap-xhdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/drawable_bg_penalizacion.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/drawable/bg_penalizacion.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/raw_gato_dormido.json.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/raw/gato_dormido.json"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/mipmap-xhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/layout_activity_bienvenida.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/layout/activity_bienvenida.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/layout_cronometro_main.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/layout/cronometro_main.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/drawable_puntos_inactivos_chiquitos.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/drawable/puntos_inactivos_chiquitos.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/xml_data_extraction_rules.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/layout_analisis_main.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/layout/analisis_main.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/drawable_ic_escudo.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/drawable/ic_escudo.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/layout_item_onboarding.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/layout/item_onboarding.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/drawable_ic_grafica.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/drawable/ic_grafica.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/mipmap-xxxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/font_poppins_semibold.ttf.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/font/poppins_semibold.ttf"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/layout_activity_configuraciones_app.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/layout/activity_configuraciones_app.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/drawable_ic_alerta_escudo.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/drawable/ic_alerta_escudo.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/drawable_fondo_barra.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/drawable/fondo_barra.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/drawable_chip_pomodoro.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/drawable/chip_pomodoro.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/font_poppins_regular.ttf.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/font/poppins_regular.ttf"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/layout_personalizacion_main.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/layout/personalizacion_main.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/font_poppins_medium.ttf.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/font/poppins_medium.ttf"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/drawable_punto_largo.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/drawable/punto_largo.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/drawable_ic_reloj.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/drawable/ic_reloj.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/font_poppins_bold.ttf.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/font/poppins_bold.ttf"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/drawable_ic_tareas.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/drawable/ic_tareas.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/layout_alerta_main.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/layout/alerta_main.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/drawable_circulos_decorativos.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/drawable/circulos_decorativos.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/mipmap-xxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/layout_tareas_main.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/layout/tareas_main.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/mipmap-hdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/mipmap-hdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/drawable_carta_oscura.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/drawable/carta_oscura.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/raw_gato_asoma.json.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/raw/gato_asoma.json"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/raw_gato_descansa.json.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/raw/gato_descansa.json"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/mipmap-mdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/mipmap-xxxhdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/mipmap-xxxhdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/drawable_ciclo_inactivo.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/drawable/ciclo_inactivo.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/mipmap-mdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/mipmap-mdpi/ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/raw_gatos_rueda.json.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/raw/gatos_rueda.json"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/mipmap-hdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/xml_backup_rules.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/drawable_ic_configtiempo.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/drawable/ic_configtiempo.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/drawable_glow_rojo.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/drawable/glow_rojo.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/menu_navegador_menu.xml.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/menu/navegador_menu.xml"
+    },
+    {
+        "merged": "com.cecyt.pomodoro.app-debug-52:/mipmap-xxhdpi_ic_launcher_foreground.webp.flat",
+        "source": "com.cecyt.pomodoro.app-main-54:/mipmap-xxhdpi/ic_launcher_foreground.webp"
+    }
+]

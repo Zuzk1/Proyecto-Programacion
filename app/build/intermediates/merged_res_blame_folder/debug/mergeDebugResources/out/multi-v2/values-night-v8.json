@@ -1,0 +1,79 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.cecyt.pomodoro.app-mergeDebugResources-50:/values-night-v8/values-night-v8.xml",
+            "map": [
+                {
+                    "source": "/home/zuzk1/.gradle/caches/9.4.1/transforms/172ec5ac9c7a89412f978e566124f48b/transformed/appcompat-1.6.1/res/values-night-v8/values-night-v8.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,125,209,293,389,491,593,687",
+                        "endColumns": "69,83,83,95,101,101,93,88",
+                        "endOffsets": "120,204,288,384,486,588,682,771"
+                    },
+                    "to": {
+                        "startLines": "7,8,9,10,11,12,13,39",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "257,327,411,495,591,693,795,3650",
+                        "endColumns": "69,83,83,95,101,101,93,88",
+                        "endOffsets": "322,406,490,586,688,790,884,3734"
+                    }
+                },
+                {
+                    "source": "/home/zuzk1/.gradle/caches/9.4.1/transforms/b381530cdec9e2d4f78f9c5b2d028262/transformed/material-1.10.0/res/values-night-v8/values-night-v8.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,130,241,330,431,538,645,744,851,954,1042,1166,1268,1370,1486,1588,1702,1830,1946,2068,2204,2324,2458,2578,2690,2816,2933,3057,3187,3309,3447,3581,3697",
+                        "endColumns": "74,110,88,100,106,106,98,106,102,87,123,101,101,115,101,113,127,115,121,135,119,133,119,111,125,116,123,129,121,137,133,115,119",
+                        "endOffsets": "125,236,325,426,533,640,739,846,949,1037,1161,1263,1365,1481,1583,1697,1825,1941,2063,2199,2319,2453,2573,2685,2811,2928,3052,3182,3304,3442,3576,3692,3812"
+                    },
+                    "to": {
+                        "startLines": "14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,40,41,42,43,44,45,46,47",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "889,964,1075,1164,1265,1372,1479,1578,1685,1788,1876,2000,2102,2204,2320,2422,2536,2664,2780,2902,3038,3158,3292,3412,3524,3739,3856,3980,4110,4232,4370,4504,4620",
+                        "endColumns": "74,110,88,100,106,106,98,106,102,87,123,101,101,115,101,113,127,115,121,135,119,133,119,111,125,116,123,129,121,137,133,115,119",
+                        "endOffsets": "959,1070,1159,1260,1367,1474,1573,1680,1783,1871,1995,2097,2199,2315,2417,2531,2659,2775,2897,3033,3153,3287,3407,3519,3645,3851,3975,4105,4227,4365,4499,4615,4735"
+                    }
+                },
+                {
+                    "source": "/home/zuzk1/.gradle/caches/9.4.1/transforms/92c0872e142aa8a070eba0485bc3bd94/transformed/core-splashscreen-1.0.1/res/values-night-v8/values-night-v8.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "85",
+                        "endOffsets": "136"
+                    },
+                    "to": {
+                        "startLines": "6",
+                        "startColumns": "4",
+                        "startOffsets": "171",
+                        "endColumns": "85",
+                        "endOffsets": "252"
+                    }
+                },
+                {
+                    "source": "/home/zuzk1/StudioProjects/Proyecto-Programacion/app/src/main/res/values-night/themes.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "100",
+                        "endLines": "5",
+                        "endColumns": "12",
+                        "endOffsets": "315"
+                    },
+                    "to": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "5",
+                        "endColumns": "12",
+                        "endOffsets": "166"
+                    }
+                }
+            ]
+        }
+    ]
+}
