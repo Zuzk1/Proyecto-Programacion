@@ -13,20 +13,19 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 
-public class CronometroActivity extends AppCompatActivity {
+public class CronometroActivity extends BaseActivity {
 
     private boolean mantenerSplashScreen = true;
     private boolean alertaYaLanzada = false;
@@ -52,7 +51,6 @@ public class CronometroActivity extends AppCompatActivity {
 
     private ObjectAnimator animacionBarra;
     private ObjectAnimator animacionTexto;
-    private ObjectAnimator animacionMenuActual;
 
     private ValueAnimator ralentizador;
 
@@ -60,7 +58,8 @@ public class CronometroActivity extends AppCompatActivity {
     private Runnable runnableCiclos;
     private static final long INTERVALO_ANIMACION_CICLOS = 10000;
 
-    private BottomNavigationView bottomNavigationView;
+    private long startTimeBase;
+    private long tiempoFinEstimado;
 
     @Override
     protected void onPause() {
@@ -120,32 +119,7 @@ public class CronometroActivity extends AppCompatActivity {
 
         botonRenunciar.setOnClickListener(v -> mostrarDialogoAdvertencia());
 
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
-
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            int indiceSeleccionado = -1;
-
-            if (itemId == R.id.nav_enfoque) {
-                indiceSeleccionado = 0;
-            } else if (itemId == R.id.nav_tareas) {
-                indiceSeleccionado = 1;
-                startActivity(new Intent(CronometroActivity.this, tareasActivity.class));
-            } else if (itemId == R.id.nav_estadisticas) {
-                indiceSeleccionado = 2;
-                startActivity(new Intent(CronometroActivity.this, analisisActivity.class));
-            }
-
-            if (indiceSeleccionado != -1) {
-                ViewGroup menuViewAlt = (ViewGroup) bottomNavigationView.getChildAt(0);
-                if (menuViewAlt != null) {
-                    animarIconoMenu(menuViewAlt, indiceSeleccionado);
-                }
-            }
-            return true;
-        });
-
-        bottomNavigationView.setSelectedItemId(R.id.nav_enfoque);
+        configurarNavegacion(R.id.nav_enfoque);
     }
 
     private void habilitarNavegacion(boolean habilitar) {
@@ -186,14 +160,33 @@ public class CronometroActivity extends AppCompatActivity {
     }
 
     private void iniciarCicloAnimacionCiclos() {
+
+        final long sessionLength = barraProgreso.getMax();
+        final long elapsed = sessionLength - tiempoRestante;
+        startTimeBase = SystemClock.elapsedRealtime() - elapsed;
+
         runnableCiclos = new Runnable() {
             @Override
             public void run() {
+                long now = SystemClock.elapsedRealtime();
+                long elapsedReal = now - startTimeBase;
+
                 animarCiclosEnCascada();
-                handlerCiclos.postDelayed(this, INTERVALO_ANIMACION_CICLOS);
+
+                long nextTarget = ((elapsedReal / INTERVALO_ANIMACION_CICLOS) + 1) * INTERVALO_ANIMACION_CICLOS;
+                long delayNext = nextTarget - elapsedReal;
+                if (delayNext <= 0) delayNext = INTERVALO_ANIMACION_CICLOS;
+
+                handlerCiclos.postDelayed(this, delayNext);
             }
         };
-        handlerCiclos.postDelayed(runnableCiclos, INTERVALO_ANIMACION_CICLOS);
+
+        long now = SystemClock.elapsedRealtime();
+        long elapsedNow = now - startTimeBase;
+        long nextTargetFirst = ((elapsedNow / INTERVALO_ANIMACION_CICLOS) + 1) * INTERVALO_ANIMACION_CICLOS;
+        long delayFirst = nextTargetFirst - elapsedNow;
+        if (delayFirst <= 0) delayFirst = INTERVALO_ANIMACION_CICLOS;
+        handlerCiclos.postDelayed(runnableCiclos, delayFirst);
     }
 
     private void animarCiclosEnCascada() {
@@ -246,25 +239,6 @@ public class CronometroActivity extends AppCompatActivity {
         animacionTexto.setRepeatCount(ObjectAnimator.INFINITE);
     }
 
-    private void animarIconoMenu(ViewGroup menuView, int indiceSeleccionado) {
-        if (animacionMenuActual != null) {
-            animacionMenuActual.cancel();
-        }
-
-        for (int i = 0; i < menuView.getChildCount(); i++) {
-            View child = menuView.getChildAt(i);
-            if (child != null) child.setTranslationY(0f);
-        }
-
-        View vistaIcono = menuView.getChildAt(indiceSeleccionado);
-        if (vistaIcono != null) {
-            animacionMenuActual = ObjectAnimator.ofFloat(vistaIcono, "translationY", 0f, -15f, 0f);
-            animacionMenuActual.setDuration(2500);
-            animacionMenuActual.setRepeatCount(ObjectAnimator.INFINITE);
-            animacionMenuActual.start();
-        }
-    }
-
     private void iniciarCronometro() {
         if (ralentizador != null && ralentizador.isRunning()) {
             ralentizador.cancel();
@@ -275,6 +249,8 @@ public class CronometroActivity extends AppCompatActivity {
         handlerCiclos.removeCallbacks(runnableCiclos);
         iniciarCicloAnimacionCiclos();
         habilitarNavegacion(false);
+
+        tiempoFinEstimado = SystemClock.elapsedRealtime() + tiempoRestante;
 
         temporizador = new CountDownTimer(tiempoRestante, 1000) {
             @Override
@@ -291,7 +267,7 @@ public class CronometroActivity extends AppCompatActivity {
 
         estaCorriendo = true;
         botonPausar.setImageResource(android.R.drawable.ic_media_pause);
-        gatoAnimado.playAnimation();
+        gatoAnimado.resumeAnimation();
 
         if (animacionBarra.isPaused()) {
             animacionBarra.resume();
@@ -309,9 +285,12 @@ public class CronometroActivity extends AppCompatActivity {
         if (temporizador != null) {
             temporizador.cancel();
         }
+
+        tiempoRestante = tiempoFinEstimado - SystemClock.elapsedRealtime();
+        if (tiempoRestante < 0) tiempoRestante = 0;
+
         estaCorriendo = false;
         botonPausar.setImageResource(android.R.drawable.ic_media_play);
-        gatoAnimado.pauseAnimation();
 
         if (ralentizador != null && ralentizador.isRunning()) {
             ralentizador.cancel();

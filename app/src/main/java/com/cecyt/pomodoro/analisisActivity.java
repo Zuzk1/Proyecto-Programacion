@@ -13,9 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-public class analisisActivity extends AppCompatActivity {
+public class analisisActivity extends BaseActivity {
 
     private GestorEstadisticas gestor;
 
@@ -27,8 +25,6 @@ public class analisisActivity extends AppCompatActivity {
             setContentView(R.layout.analisis_main);
 
             gestor = new GestorEstadisticas(this);
-
-            configurarBotonVolver();
             cargarDatosReales();
 
             int[] datosPomodorosSemana = gestor.getDatosSemana();
@@ -38,6 +34,8 @@ public class analisisActivity extends AppCompatActivity {
                 Intent intent = new Intent(analisisActivity.this, personalizacionActivity.class);
                 startActivity(intent);
             });
+
+            configurarNavegacion(R.id.nav_estadisticas);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,11 +86,6 @@ public class analisisActivity extends AppCompatActivity {
             spannableFallos.setSpan(new ForegroundColorSpan(Color.parseColor("#E57373")), inicioRojoFallos, textoFallos.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         tvFallos.setText(spannableFallos);
-    }
-
-    private void configurarBotonVolver() {
-        ImageView btnVolver = findViewById(R.id.btnVolver);
-        btnVolver.setOnClickListener(v -> finish());
     }
 
     private void dibujarGraficaDeBarras(int[] datos) {

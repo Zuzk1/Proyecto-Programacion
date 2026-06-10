@@ -4,24 +4,22 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager; // Importación obligatoria para el teclado
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 
-public class tareasActivity extends AppCompatActivity {
+public class tareasActivity extends BaseActivity {
 
     private TextView tvTareaActiva;
     private TextView tvResumen;
@@ -32,7 +30,6 @@ public class tareasActivity extends AppCompatActivity {
     private MaterialButton btnGuardarRedaccion;
     private ConstraintLayout cardRedactarTarea;
     private EditText etNuevaTareaInput;
-    private BottomNavigationView bottomNavigationView;
 
     private SharedPreferences preferencias;
     private static final String PREFS_NAME = "PreferenciasCajaFacil";
@@ -46,11 +43,9 @@ public class tareasActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
 
         setContentView(R.layout.tareas_main);
 
-        // Inicialización correcta
         preferencias = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
         tvTareaActiva = findViewById(R.id.tvTareaActiva);
@@ -62,7 +57,6 @@ public class tareasActivity extends AppCompatActivity {
         btnGuardarRedaccion = findViewById(R.id.btnGuardarRedaccion);
         etNuevaTareaInput = findViewById(R.id.etNuevaTareaInput);
         cardRedactarTarea = findViewById(R.id.cardRedactarTarea);
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         listaTareas = new ArrayList<>();
 
@@ -102,12 +96,7 @@ public class tareasActivity extends AppCompatActivity {
             ocultarPanelRedaccion();
         });
 
-        if (bottomNavigationView != null) {
-            bottomNavigationView.setOnItemSelectedListener(item -> {
-                Toast.makeText(this, "Sección: " + item.getTitle(), Toast.LENGTH_SHORT).show();
-                return true;
-            });
-        }
+        configurarNavegacion(R.id.nav_tareas);
     }
 
     private void mostrarOpcionesTarea(int posicion) {
