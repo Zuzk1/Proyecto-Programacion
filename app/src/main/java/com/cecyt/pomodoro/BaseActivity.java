@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class BaseActivity extends AppCompatActivity {
@@ -21,6 +24,8 @@ public class BaseActivity extends AppCompatActivity {
         this.idMenuActual = idItemSeleccionado;
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         if (bottomNavigationView == null) return;
+
+        aplicarInsetsBarrasSistema();
 
         bottomNavigationView.getMenu().findItem(idItemSeleccionado).setChecked(true);
 
@@ -77,6 +82,24 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    private void aplicarInsetsBarrasSistema() {
+        View contenido = findViewById(android.R.id.content);
+        View appBar = findViewById(R.id.appBar);
+
+        ViewCompat.setOnApplyWindowInsetsListener(contenido, (vista, insets) -> {
+            Insets barras = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            if (appBar != null) {
+                appBar.setPadding(appBar.getPaddingLeft(), barras.top, appBar.getPaddingRight(), appBar.getPaddingBottom());
+            }
+
+            bottomNavigationView.setPadding(bottomNavigationView.getPaddingLeft(), bottomNavigationView.getPaddingTop(),
+                    bottomNavigationView.getPaddingRight(), barras.bottom);
+
+            return insets;
+        });
+    }
+
     private void animarIconosToolbar() {
         View ivEscudo = findViewById(R.id.ivEscudo);
         View ivConfig = findViewById(R.id.ivConfigTiempo);
@@ -106,7 +129,7 @@ public class BaseActivity extends AppCompatActivity {
         if (id == R.id.nav_estadisticas) return 2;
         return -1;
     }
-//ola
+
     private void animarIconoMenu(ViewGroup menuView, int indiceSeleccionado) {
         detenerAnimacionIconoMenuSuave();
 

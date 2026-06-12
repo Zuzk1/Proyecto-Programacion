@@ -1,15 +1,14 @@
 package com.cecyt.pomodoro;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.provider.Settings;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -22,10 +21,9 @@ public class CronometroService extends Service {
     public static final String EXTRA_TIEMPO_RESTANTE = "extra_tiempo_restante";
     public static final String EXTRA_ES_DESCANSO = "extra_es_descanso";
 
-    private static final String CANAL_PROGRESO_ID = "canal_progreso_pomodoro";
-    private static final String CANAL_ALARMA_ID = "canal_alarma_pomodoro";
-    private static final int NOTIF_ID_PROGRESO = 1001;
-    private static final int NOTIF_ID_ALARMA = 1002;
+    private static final int ID_NOTIFICACION_PROGRESO = 1001;
+
+    private static final String ETIQUETA_DEPURACION = "DepuracionCronometro";
 
     private final Handler manejador = new Handler(Looper.getMainLooper());
     private Runnable accionFinalizacion;
@@ -33,17 +31,20 @@ public class CronometroService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        crearCanalesNotificacion();
+        Log.d(ETIQUETA_DEPURACION, "Servicio: onCreate");
+        GestorAlertas.crearCanales(this);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent == null) {
+            Log.d(ETIQUETA_DEPURACION, "Servicio: onStartCommand con intent nulo, deteniendo");
             detenerServicio();
             return START_NOT_STICKY;
         }
 
         String accion = intent.getAction();
+        Log.d(ETIQUETA_DEPURACION, "Servicio: onStartCommand accion=" + accion);
         if (ACCION_DETENER.equals(accion)) {
             detenerServicio();
             return START_NOT_STICKY;
@@ -51,24 +52,9 @@ public class CronometroService extends Service {
 
         long tiempoRestante = intent.getLongExtra(EXTRA_TIEMPO_RESTANTE, 0);
         boolean esDescanso = intent.getBooleanExtra(EXTRA_ES_DESCANSO, false);
+        Log.d(ETIQUETA_DEPURACION, "Servicio: iniciando seguimiento, tiempoRestante=" + tiempoRestante + " esDescanso=" + esDescanso);
         iniciarSeguimiento(tiempoRestante, esDescanso);
         return START_STICKY;
-    }
-
-    private void crearCanalesNotificacion() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManager manejadorNotificaciones = getSystemService(NotificationManager.class);
-
-            NotificationChannel canalProgreso = new NotificationChannel(
-                    CANAL_PROGRESO_ID, "Sesión en curso", NotificationManager.IMPORTANCE_LOW);
-            canalProgreso.setDescription("Muestra el progreso de la sesión de enfoque o descanso");
-            manejadorNotificaciones.createNotificationChannel(canalProgreso);
-
-            NotificationChannel canalAlarma = new NotificationChannel(
-                    CANAL_ALARMA_ID, "Alarma de Pomodoro", NotificationManager.IMPORTANCE_HIGH);
-            canalAlarma.setDescription("Avisa cuando termina la sesión de enfoque o descanso");
-            manejadorNotificaciones.createNotificationChannel(canalAlarma);
-        }
     }
 
     private void iniciarSeguimiento(long tiempoRestante, boolean esDescanso) {
@@ -78,9 +64,11 @@ public class CronometroService extends Service {
 
         long finEstimado = System.currentTimeMillis() + tiempoRestante;
 
-        startForeground(NOTIF_ID_PROGRESO, construirNotificacionProgreso(finEstimado, esDescanso));
+        Log.d(ETIQUETA_DEPURACION, "Servicio: llamando startForeground");
+        startForeground(ID_NOTIFICACION_PROGRESO, construirNotificacionProgreso(finEstimado, esDescanso));
 
         accionFinalizacion = () -> {
+            Log.d(ETIQUETA_DEPURACION, "Servicio: tiempo agotado, notificando finalizacion");
             notificarFinalizacion(esDescanso);
             detenerServicio();
         };
@@ -90,11 +78,11 @@ public class CronometroService extends Service {
     private android.app.Notification construirNotificacionProgreso(long finEstimado, boolean esDescanso) {
         Intent intentAbrirApp = new Intent(this, CronometroActivity.class);
         intentAbrirApp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        PendingIntent pendingAbrirApp = PendingIntent.getActivity(
+        PendingIntent intentoPendienteAbrirApp = PendingIntent.getActivity(
                 this, 0, intentAbrirApp, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        return new NotificationCompat.Builder(this, CANAL_PROGRESO_ID)
-                .setSmallIcon(R.drawable.ic_reloj)
+        return new NotificationCompat.Builder(this, GestorAlertas.CANAL_PROGRESO_ID)
+                .setSmallIcon(R.drawable.ic_gato_notificacion)
                 .setContentTitle(esDescanso ? "Descanso en curso" : "Sesión de enfoque en curso")
                 .setContentText("Toca para volver a Miau Focus")
                 .setOngoing(true)
@@ -103,34 +91,44 @@ public class CronometroService extends Service {
                 .setChronometerCountDown(true)
                 .setWhen(finEstimado)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setContentIntent(pendingAbrirApp)
+                .setContentIntent(intentoPendienteAbrirApp)
                 .build();
     }
 
     private void notificarFinalizacion(boolean esDescanso) {
+        Log.d(ETIQUETA_DEPURACION, "Servicio: notificarFinalizacion, puedeDibujarSobreOtrasApps=" + Settings.canDrawOverlays(this)
+                + " permisoNotificaciones=" + (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED));
         Intent intentAlerta = new Intent(this, alertaActivity.class);
-        intentAlerta.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingAlerta = PendingIntent.getActivity(
+        intentAlerta.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+        PendingIntent intentoPendienteAlerta = PendingIntent.getActivity(
                 this, 1, intentAlerta, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        android.app.Notification notificacionAlarma = new NotificationCompat.Builder(this, CANAL_ALARMA_ID)
-                .setSmallIcon(R.drawable.ic_reloj)
+        android.app.Notification notificacionAlarma = new NotificationCompat.Builder(this, GestorAlertas.CANAL_ALARMA_ID)
+                .setSmallIcon(R.drawable.ic_gato_notificacion)
                 .setContentTitle(esDescanso ? "¡El descanso terminó!" : "¡La sesión de enfoque terminó!")
                 .setContentText("Toca para continuar")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
-                .setFullScreenIntent(pendingAlerta, true)
-                .setContentIntent(pendingAlerta)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setFullScreenIntent(intentoPendienteAlerta, true)
+                .setContentIntent(intentoPendienteAlerta)
                 .setAutoCancel(true)
                 .build();
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
                 == PackageManager.PERMISSION_GRANTED) {
-            NotificationManagerCompat.from(this).notify(NOTIF_ID_ALARMA, notificacionAlarma);
+            NotificationManagerCompat.from(this).notify(GestorAlertas.ID_NOTIFICACION_ALARMA, notificacionAlarma);
+        }
+
+        if (Settings.canDrawOverlays(this)) {
+            Intent intentAlertaDirecta = new Intent(this, alertaActivity.class);
+            intentAlertaDirecta.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intentAlertaDirecta);
         }
     }
 
     private void detenerServicio() {
+        Log.d(ETIQUETA_DEPURACION, "Servicio: detenerServicio");
         if (accionFinalizacion != null) {
             manejador.removeCallbacks(accionFinalizacion);
             accionFinalizacion = null;
@@ -142,6 +140,7 @@ public class CronometroService extends Service {
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
+        Log.d(ETIQUETA_DEPURACION, "Servicio: onTaskRemoved");
         detenerServicio();
     }
 

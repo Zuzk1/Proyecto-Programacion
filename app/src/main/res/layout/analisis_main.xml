@@ -101,6 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/color_gris_texto_secundario"
             android:textSize="15sp"
             tools:text="Racha Actual: 7 Días" />
 
@@ -109,8 +110,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/color_gris_texto_secundario"
             android:textSize="15sp"
-            tools:text="Tasa de Fallos: 12% · Bloques Abandonados" />
+            tools:text="Tasa de Fallos: 12% · 3 bloques abandonados" />
 
     </LinearLayout>
 

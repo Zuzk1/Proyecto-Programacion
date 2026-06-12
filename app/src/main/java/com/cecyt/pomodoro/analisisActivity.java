@@ -2,12 +2,8 @@ package com.cecyt.pomodoro;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,15 +59,7 @@ public class analisisActivity extends BaseActivity {
         ((TextView) findViewById(R.id.tvPuntos)).setText(puntos + " Puntos");
 
         TextView tvRacha = findViewById(R.id.tvRachaActual);
-        String textoRacha = "Racha Actual: " + racha + " Días (¡Pérdida en caso de Fallo!)";
-        SpannableString spannableRacha = new SpannableString(textoRacha);
-        int inicioRojoRacha = textoRacha.indexOf("(");
-
-        if (inicioRojoRacha != -1) {
-            spannableRacha.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.color_gris_texto_secundario)), 0, inicioRojoRacha, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannableRacha.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.color_rojo_alerta_texto)), inicioRojoRacha, textoRacha.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        tvRacha.setText(spannableRacha);
+        tvRacha.setText("Racha Actual: " + racha + " Días");
 
         float porcentajeFallo = 0;
         int intentosTotales = completados + fallos;
@@ -81,15 +69,7 @@ public class analisisActivity extends BaseActivity {
 
         TextView tvFallos = findViewById(R.id.tvTasaFallos);
         String stringPorcentaje = String.format("%.0f%%", porcentajeFallo);
-        String textoFallos = "Tasa de Fallos: " + stringPorcentaje + " · Bloques Abandonados (" + fallos + ")";
-        SpannableString spannableFallos = new SpannableString(textoFallos);
-        int inicioRojoFallos = textoFallos.indexOf("·");
-
-        if (inicioRojoFallos != -1) {
-            spannableFallos.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.color_gris_texto_secundario)), 0, inicioRojoFallos, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannableFallos.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.color_rojo_alerta_texto)), inicioRojoFallos, textoFallos.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        tvFallos.setText(spannableFallos);
+        tvFallos.setText("Tasa de Fallos: " + stringPorcentaje + " · " + fallos + " bloques abandonados");
     }
 
     private void cargarActividadesRecientes() {
@@ -159,7 +139,6 @@ public class analisisActivity extends BaseActivity {
             columna.addView(areaBarra);
             columna.addView(tvDia);
             llContenedorBarras.addView(columna);
-            //HolaaA
         }
     }
 }

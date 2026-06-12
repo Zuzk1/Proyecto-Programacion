@@ -11,6 +11,7 @@ import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
@@ -40,6 +41,18 @@ public class alertaActivity extends AppCompatActivity {
 
         pbProgresoSilenciar.setAlpha(0f);
         pbProgresoSilenciar.setVisibility(View.INVISIBLE);
+
+        if (getIntent().getBooleanExtra(GestorAlertas.EXTRA_ES_INFRACCION, false)) {
+            new GestorEstadisticas(this).registrarFallo();
+        }
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // No se permite regresar al cronómetro con el botón de retroceso:
+                // la única salida es mantener el botón de cancelar o cerrar la app.
+            }
+        });
 
         animarAura();
         reproducirAlarma();

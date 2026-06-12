@@ -7,18 +7,21 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -41,6 +44,8 @@ public class CronometroActivity extends BaseActivity {
     private final long TIEMPO_ENFOQUE = 1500000;
     private final long TIEMPO_DESCANSO_CORTO = 300000;
     private final long TIEMPO_DESCANSO_LARGO = 900000;
+
+    public static volatile boolean estaCorriendoGlobal = false;
 
     private long tiempoRestante = TIEMPO_ENFOQUE;
     private boolean estaCorriendo = false;
@@ -73,9 +78,12 @@ public class CronometroActivity extends BaseActivity {
 
     private ActivityResultLauncher<String> solicitarPermisoNotificaciones;
 
+    private static final String ETIQUETA_DEPURACION = "DepuracionCronometro";
+
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d(ETIQUETA_DEPURACION, "onPause: estaCorriendo=" + estaCorriendo);
         if (estaCorriendo) {
             long tiempoRestanteReal = tiempoFinEstimado - SystemClock.elapsedRealtime();
             if (tiempoRestanteReal < 0) tiempoRestanteReal = 0;
@@ -84,6 +92,7 @@ public class CronometroActivity extends BaseActivity {
             intentServicio.setAction(CronometroService.ACCION_INICIAR);
             intentServicio.putExtra(CronometroService.EXTRA_TIEMPO_RESTANTE, tiempoRestanteReal);
             intentServicio.putExtra(CronometroService.EXTRA_ES_DESCANSO, esDescanso);
+            Log.d(ETIQUETA_DEPURACION, "onPause: iniciando servicio con tiempoRestanteReal=" + tiempoRestanteReal);
             ContextCompat.startForegroundService(this, intentServicio);
         }
     }
@@ -91,8 +100,86 @@ public class CronometroActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(ETIQUETA_DEPURACION, "onResume: deteniendo servicio si estaba activo");
         detenerServicioCronometro();
         actualizarTareaActiva();
+    }
+
+    private void iniciarFlujoSolicitudPermisos() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                && ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                        != PackageManager.PERMISSION_GRANTED) {
+            solicitarPermisoNotificacionesConTarjeta(this::solicitarPermisoPantallaCompleta);
+        } else {
+            solicitarPermisoPantallaCompleta();
+        }
+    }
+
+    private void solicitarPermisoNotificacionesConTarjeta(Runnable alFinalizar) {
+        SharedPreferences preferencias = getSharedPreferences("PreferenciasCajaFacil", Context.MODE_PRIVATE);
+        if (preferencias.getBoolean("permiso_notificaciones_solicitado", false)) {
+            alFinalizar.run();
+            return;
+        }
+
+        preferencias.edit().putBoolean("permiso_notificaciones_solicitado", true).apply();
+
+        DialogoPermiso.mostrar(this,
+                "¡No te pierdas el aviso!",
+                "Activa las notificaciones para que Miau Focus te avise apenas termine tu sesión de enfoque o descanso.",
+                "Activar notificaciones",
+                () -> solicitarPermisoNotificaciones.launch(Manifest.permission.POST_NOTIFICATIONS),
+                alFinalizar);
+    }
+
+    private void solicitarPermisoPantallaCompleta() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            solicitarPermisoSuperposicion();
+            return;
+        }
+
+        SharedPreferences preferencias = getSharedPreferences("PreferenciasCajaFacil", Context.MODE_PRIVATE);
+        if (preferencias.getBoolean("permiso_pantalla_completa_solicitado", false)) {
+            solicitarPermisoSuperposicion();
+            return;
+        }
+
+        NotificationManager gestorNotificaciones = getSystemService(NotificationManager.class);
+        if (gestorNotificaciones != null && !gestorNotificaciones.canUseFullScreenIntent()) {
+            preferencias.edit().putBoolean("permiso_pantalla_completa_solicitado", true).apply();
+
+            DialogoPermiso.mostrar(this,
+                    "¡No te pierdas la alerta!",
+                    "Para que la alerta de fin de sesión se muestre en pantalla completa aunque estés usando otra app, activa el permiso de pantalla completa para Miau Focus.",
+                    "Configurar",
+                    () -> {
+                        Intent intentConfiguracion = new Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT);
+                        intentConfiguracion.setData(Uri.parse("package:" + getPackageName()));
+                        startActivity(intentConfiguracion);
+                    },
+                    this::solicitarPermisoSuperposicion);
+        } else {
+            solicitarPermisoSuperposicion();
+        }
+    }
+
+    private void solicitarPermisoSuperposicion() {
+        if (Settings.canDrawOverlays(this)) return;
+
+        SharedPreferences preferencias = getSharedPreferences("PreferenciasCajaFacil", Context.MODE_PRIVATE);
+        if (preferencias.getBoolean("permiso_superposicion_solicitado", false)) return;
+
+        preferencias.edit().putBoolean("permiso_superposicion_solicitado", true).apply();
+
+        DialogoPermiso.mostrar(this,
+                "Que no se te escape",
+                "Para que la alerta de fin de sesión aparezca sobre cualquier otra app, activa el permiso \"Mostrar sobre otras apps\" para Miau Focus.",
+                "Configurar",
+                () -> {
+                    Intent intentPermiso = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                            Uri.parse("package:" + getPackageName()));
+                    startActivity(intentPermiso);
+                });
     }
 
     private void detenerServicioCronometro() {
@@ -130,11 +217,7 @@ public class CronometroActivity extends BaseActivity {
         solicitarPermisoNotificaciones = registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(), concedido -> { });
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-                && ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
-                        != PackageManager.PERMISSION_GRANTED) {
-            solicitarPermisoNotificaciones.launch(Manifest.permission.POST_NOTIFICATIONS);
-        }
+        iniciarFlujoSolicitudPermisos();
 
         splashScreen.setKeepOnScreenCondition(() -> mantenerSplashScreen);
         new Handler(Looper.getMainLooper()).postDelayed(() -> mantenerSplashScreen = false, 850);
@@ -353,6 +436,7 @@ public class CronometroActivity extends BaseActivity {
         }.start();
 
         estaCorriendo = true;
+        estaCorriendoGlobal = true;
         botonPausar.setImageResource(android.R.drawable.ic_media_pause);
         gatoAnimado.resumeAnimation();
 
@@ -377,6 +461,7 @@ public class CronometroActivity extends BaseActivity {
         if (tiempoRestante < 0) tiempoRestante = 0;
 
         estaCorriendo = false;
+        estaCorriendoGlobal = false;
         botonPausar.setImageResource(android.R.drawable.ic_media_play);
 
         if (ralentizador != null && ralentizador.isRunning()) {
@@ -403,6 +488,7 @@ public class CronometroActivity extends BaseActivity {
         habilitarNavegacion(true);
 
         estaCorriendo = false;
+        estaCorriendoGlobal = false;
         botonPausar.setImageResource(android.R.drawable.ic_media_play);
         detenerYRestablecerAnimaciones();
         gatoAnimado.pauseAnimation();
@@ -481,12 +567,7 @@ public class CronometroActivity extends BaseActivity {
     }
 
     private void mostrarDialogoAdvertencia() {
-        new AlertDialog.Builder(this)
-                .setTitle("Advertencia")
-                .setMessage("¿Estás seguro de renunciar a la sesión? Se aplicará el castigo correspondiente.")
-                .setPositiveButton("Renunciar", (dialog, which) -> reiniciarCronometro())
-                .setNegativeButton("Cancelar", null)
-                .show();
+        DialogoAdvertencia.mostrar(this, this::reiniciarCronometro);
     }
 
     private void reiniciarCronometro() {
@@ -503,6 +584,7 @@ public class CronometroActivity extends BaseActivity {
 
         tiempoRestante = TIEMPO_ENFOQUE;
         estaCorriendo = false;
+        estaCorriendoGlobal = false;
         esDescanso = false;
         cicloActual = 1;
 
