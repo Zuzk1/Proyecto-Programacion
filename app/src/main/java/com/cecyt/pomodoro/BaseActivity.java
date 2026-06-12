@@ -8,18 +8,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class BaseActivity extends AppCompatActivity {
 
     protected BottomNavigationView bottomNavigationView;
     private ObjectAnimator animacionMenuActual;
+    private View vistaIconoMenuActual;
     private int idMenuActual = 0;
+    private boolean animacionMenuPausada = false;
 
     protected void configurarNavegacion(int idItemSeleccionado) {
         this.idMenuActual = idItemSeleccionado;
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         if (bottomNavigationView == null) return;
+
+        aplicarInsetsBarrasSistema();
 
         bottomNavigationView.getMenu().findItem(idItemSeleccionado).setChecked(true);
 
@@ -47,9 +54,14 @@ public class BaseActivity extends AppCompatActivity {
             }
 
             if (intent != null) {
-                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
+                final Intent intentDestino = intent;
+                detenerAnimacionIconoMenuSuave();
+
+                bottomNavigationView.postDelayed(() -> {
+                    intentDestino.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(intentDestino);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                }, 180);
             }
 
             return false;
@@ -69,6 +81,24 @@ public class BaseActivity extends AppCompatActivity {
                 if (indice != -1) animarIconoMenu(menuView, indice);
             });
         }
+    }
+
+    private void aplicarInsetsBarrasSistema() {
+        View contenido = findViewById(android.R.id.content);
+        View appBar = findViewById(R.id.appBar);
+
+        ViewCompat.setOnApplyWindowInsetsListener(contenido, (vista, insets) -> {
+            Insets barras = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            if (appBar != null) {
+                appBar.setPadding(appBar.getPaddingLeft(), barras.top, appBar.getPaddingRight(), appBar.getPaddingBottom());
+            }
+
+            bottomNavigationView.setPadding(bottomNavigationView.getPaddingLeft(), bottomNavigationView.getPaddingTop(),
+                    bottomNavigationView.getPaddingRight(), barras.bottom);
+
+            return insets;
+        });
     }
 
     private void animarIconosToolbar() {
@@ -100,19 +130,51 @@ public class BaseActivity extends AppCompatActivity {
         if (id == R.id.nav_estadisticas) return 2;
         return -1;
     }
-//ola
+
     private void animarIconoMenu(ViewGroup menuView, int indiceSeleccionado) {
-        if (animacionMenuActual != null) animacionMenuActual.cancel();
-        for (int i = 0; i < menuView.getChildCount(); i++) {
-            View child = menuView.getChildAt(i);
-            if (child != null) child.setTranslationY(0f);
-        }
+        detenerAnimacionIconoMenuSuave();
+
         View vistaIcono = menuView.getChildAt(indiceSeleccionado);
         if (vistaIcono != null) {
-            animacionMenuActual = ObjectAnimator.ofFloat(vistaIcono, "translationY", 0f, -15f, 0f);
-            animacionMenuActual.setDuration(2500);
-            animacionMenuActual.setRepeatCount(ObjectAnimator.INFINITE);
-            animacionMenuActual.start();
+            if (animacionMenuPausada) {
+                vistaIconoMenuActual = vistaIcono;
+            } else {
+                iniciarAnimacionIconoMenu(vistaIcono);
+            }
+        }
+    }
+
+    private void iniciarAnimacionIconoMenu(View vistaIcono) {
+        vistaIconoMenuActual = vistaIcono;
+        animacionMenuActual = ObjectAnimator.ofFloat(vistaIcono, "translationY", 0f, -15f, 0f);
+        animacionMenuActual.setDuration(2500);
+        animacionMenuActual.setRepeatCount(ObjectAnimator.INFINITE);
+        animacionMenuActual.start();
+    }
+
+    private void detenerAnimacionIconoMenuSuave() {
+        if (animacionMenuActual != null) {
+            animacionMenuActual.cancel();
+            animacionMenuActual = null;
+        }
+
+        if (vistaIconoMenuActual != null) {
+            ObjectAnimator detener = ObjectAnimator.ofFloat(vistaIconoMenuActual, "translationY", vistaIconoMenuActual.getTranslationY(), 0f);
+            detener.setDuration(300);
+            detener.setInterpolator(new AccelerateDecelerateInterpolator());
+            detener.start();
+        }
+    }
+
+    protected void pausarAnimacionMenuSuave() {
+        animacionMenuPausada = true;
+        detenerAnimacionIconoMenuSuave();
+    }
+
+    protected void reanudarAnimacionMenuSuave() {
+        animacionMenuPausada = false;
+        if (vistaIconoMenuActual != null) {
+            iniciarAnimacionIconoMenu(vistaIconoMenuActual);
         }
     }
 }

@@ -1,16 +1,16 @@
 <resources>
 
     <style name="Base.Theme.Pomodoro" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorPrimary">#2196F3</item>
-        <item name="colorSecondary">#2196F3</item>
-        <item name="colorOnSecondaryContainer">#FFFFFF</item>
-        <item name="colorSecondaryContainer">#1A3A5C</item>
+        <item name="colorPrimary">@color/color_azul_principal</item>
+        <item name="colorSecondary">@color/color_azul_principal</item>
+        <item name="colorOnSecondaryContainer">@color/white</item>
+        <item name="colorSecondaryContainer">@color/color_azul_contenedor_secundario</item>
     </style>
 
     <style name="Theme.Pomodoro" parent="Base.Theme.Pomodoro" />
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">#1A1A24</item>
+        <item name="windowSplashScreenBackground">@color/color_fondo_splash</item>
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
         <item name="postSplashScreenTheme">@style/Theme.Pomodoro</item>
     </style>

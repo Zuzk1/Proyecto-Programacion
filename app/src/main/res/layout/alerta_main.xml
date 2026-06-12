@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1A0A0A">
+    android:background="@color/color_fondo_alerta">
 
     <View
         android:id="@+id/viewGlowTop"
@@ -27,7 +27,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="#E53935" />
+        app:tint="@color/color_rojo_peligro" />
 
     <TextView
 
@@ -39,7 +39,7 @@
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="¡INFRACCIÓN\nDE ENFOQUE!"
-        android:textColor="#FF5252"
+        android:textColor="@color/color_rojo_brillante"
         android:textSize="32sp"
         android:textStyle="bold"
         android:letterSpacing="0.05"
@@ -53,7 +53,7 @@
         android:layout_width="48dp"
         android:layout_height="2dp"
         android:layout_marginTop="16dp"
-        android:background="#E53935"
+        android:background="@color/color_rojo_peligro"
         android:alpha="0.6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +68,7 @@
         android:gravity="center"
         android:lineSpacingMultiplier="1.4"
         android:text="Regresa a la app y mantén el botón para silenciar la alarma."
-        android:textColor="#FFCDD2"
+        android:textColor="@color/color_rojo_claro"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -83,7 +83,7 @@
         android:paddingVertical="6dp"
         android:background="@drawable/bg_penalizacion"
         android:text="Penalización activa — pérdida de puntos"
-        android:textColor="#FF8A80"
+        android:textColor="@color/color_rojo_claro_intenso"
         android:textSize="11sp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
@@ -106,9 +106,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:theme="@style/Theme.MaterialComponents"
-            android:backgroundTint="#B71C1C"
+            android:backgroundTint="@color/color_rojo_oscuro"
             android:text="MANTÉN 5s"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
             android:letterSpacing="0.08"
@@ -126,9 +126,9 @@
             android:max="5000"
             android:progress="0"
             android:visibility="invisible"
-            app:indicatorColor="#FFFFFF"
+            app:indicatorColor="@color/white"
             app:indicatorSize="200dp"
-            app:trackColor="#00000000"
+            app:trackColor="@color/color_transparente"
             app:trackThickness="6dp" />
     </FrameLayout>
 
@@ -138,7 +138,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="48dp"
         android:text="Mantén presionado para cancelar la sesión"
-        android:textColor="#B71C1C"
+        android:textColor="@color/color_rojo_oscuro"
         android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

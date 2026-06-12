@@ -1,5 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
+    <!-- Blanco puro -->
     <color name="white">#FFFFFFFF</color>
+    <!-- Negro puro -->
+    <color name="black">#FF000000</color>
+    <!-- Totalmente transparente -->
+    <color name="color_transparente">#00000000</color>
+
+    <!-- Azul principal de la app (botones, acentos, colorPrimary/colorSecondary) -->
+    <color name="color_azul_principal">#2196F3</color>
+    <!-- Azul claro usado en textos destacados de la pantalla de bienvenida -->
+    <color name="color_azul_claro">#64B5F6</color>
+    <!-- Azul oscuro del contenedor secundario (indicador activo de la navegación inferior) -->
+    <color name="color_azul_contenedor_secundario">#1A3A5C</color>
+    <!-- Azul principal con 10% de opacidad, usado en chips/fondos resaltados -->
+    <color name="color_azul_overlay_10">#1A2196F3</color>
+    <!-- Azul principal con 20% de opacidad, usado en bordes de fondos resaltados -->
+    <color name="color_azul_overlay_20">#332196F3</color>
+
+    <!-- Fondo oscuro principal de las pantallas de la app -->
+    <color name="color_fondo_principal">#1F1F24</color>
+    <!-- Fondo de la barra de navegación inferior -->
+    <color name="color_fondo_barra_navegacion">#1E1E24</color>
+    <!-- Fondo del splash screen -->
+    <color name="color_fondo_splash">#1A1A24</color>
+    <!-- Fondo de tarjetas oscuras (cards de estadísticas, tareas, etc.) -->
+    <color name="color_fondo_tarjeta">#26262D</color>
+    <!-- Fondo de la tarjeta de tareas en onboarding -->
+    <color name="color_fondo_tarjeta_onboarding">#26262C</color>
+    <!-- Fondo del contenedor de la tarea activa -->
+    <color name="color_fondo_tarjeta_activa">#25252D</color>
+    <!-- Fondo de tarjetas modales (diálogos de redacción) -->
+    <color name="color_fondo_modal">#2D2D36</color>
+    <!-- Fondo del track del indicador de progreso circular -->
+    <color name="color_fondo_track_progreso">#2E2E35</color>
+
+    <!-- Gris para textos secundarios (subtítulos, estadísticas) -->
+    <color name="color_gris_texto_secundario">#A0A0A0</color>
+    <!-- Gris para textos terciarios (ej. días de la semana en la gráfica) -->
+    <color name="color_gris_texto_terciario">#888888</color>
+    <!-- Gris claro para etiquetas (ej. "Tarea activa:") -->
+    <color name="color_gris_texto_claro">#AAAAAA</color>
+    <!-- Gris para el ripple del botón de la tienda de temas -->
+    <color name="color_gris_ripple">#DCDCDC</color>
+    <!-- Gris de los íconos de la barra de navegación inferior (vectores) -->
+    <color name="color_icono_gris_claro">#e3e3e3</color>
+
+    <!-- Gris de los íconos/textos de navegación cuando están deshabilitados -->
+    <color name="color_gris_icono_apagado">#8A8A8A</color>
+    <!-- Gris del indicador activo de navegación cuando está deshabilitado -->
+    <color name="color_gris_navegacion_apagada">#5A5A5A</color>
+    <!-- Gris del indicador de ciclo ya completado -->
+    <color name="color_gris_indicador_apagado">#555555</color>
+    <!-- Gris usado al restaurar los indicadores de ciclo a su estado inicial -->
+    <color name="color_gris_indicador_restaurado">#333333</color>
+    <!-- Gris del indicador de ciclo inactivo (forma del círculo) -->
+    <color name="color_gris_ciclo_inactivo">#444444</color>
+
+    <!-- Verde de éxito (racha activa, sesión de enfoque completada) -->
+    <color name="color_verde_exito">#4CAF50</color>
+
+    <!-- Rojo de peligro (botón renunciar, alertas) -->
+    <color name="color_rojo_peligro">#E53935</color>
+    <!-- Rojo usado en textos de alerta (tasa de fallos, racha) -->
+    <color name="color_rojo_alerta_texto">#E57373</color>
+    <!-- Rojo oscuro para fondos/textos de penalización -->
+    <color name="color_rojo_oscuro">#B71C1C</color>
+    <!-- Rojo claro para textos de advertencia -->
+    <color name="color_rojo_claro">#FFCDD2</color>
+    <!-- Rojo claro intenso para textos de advertencia secundarios -->
+    <color name="color_rojo_claro_intenso">#FF8A80</color>
+    <!-- Rojo brillante para textos de alarma -->
+    <color name="color_rojo_brillante">#FF5252</color>
+    <!-- Fondo oscuro de la pantalla de alerta -->
+    <color name="color_fondo_alerta">#1A0A0A</color>
+    <!-- Rojo de peligro con 30% de opacidad, usado en el resplandor de la alerta -->
+    <color name="color_rojo_glow">#4DE53935</color>
+
+    <!-- Negro semitransparente usado como overlay del modal de redacción -->
+    <color name="color_negro_overlay_50">#80000000</color>
+    <!-- Blanco semitransparente para puntos inactivos del onboarding -->
+    <color name="color_blanco_overlay_20">#33FFFFFF</color>
+    <!-- Blanco semitransparente para subtítulos del onboarding -->
+    <color name="color_blanco_overlay_60">#99FFFFFF</color>
 </resources>

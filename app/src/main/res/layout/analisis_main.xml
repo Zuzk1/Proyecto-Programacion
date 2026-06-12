@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1F1F24"
+    android:background="@color/color_fondo_principal"
     android:clipChildren="false"
     android:clipToPadding="false"
     tools:context=".analisisActivity">
@@ -15,7 +15,7 @@
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#1F1F24"
+        android:background="@color/color_fondo_principal"
         app:elevation="0dp"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -23,7 +23,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#1F1F24">
+            android:background="@color/color_fondo_principal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginStart="16dp"
                 android:text="Estadisticas"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/white"
                 android:textSize="22sp"
                 android:fontFamily="@font/poppins_semibold"
                 android:textStyle="bold" />
@@ -50,14 +50,14 @@
                     android:layout_height="28dp"
                     android:layout_marginEnd="20dp"
                     android:src="@drawable/ic_escudo"
-                    app:tint="#4CAF50" />
+                    app:tint="@color/color_verde_exito" />
 
                 <ImageView
                     android:id="@+id/ivConfigTiempo"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:src="@drawable/ic_configtiempo"
-                    app:tint="#FFFFFF" />
+                    app:tint="@color/white" />
             </LinearLayout>
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/poppins_medium"
-            android:textColor="#A0A0A0"
+            android:textColor="@color/color_gris_texto_secundario"
             android:textSize="15sp"
             tools:text="Tiempo de Enfoque Total: 18 hrs" />
 
@@ -91,7 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/poppins_medium"
-            android:textColor="#A0A0A0"
+            android:textColor="@color/color_gris_texto_secundario"
             android:textSize="15sp"
             tools:text="Pomodoros Completados: 36" />
 
@@ -101,6 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/color_gris_texto_secundario"
             android:textSize="15sp"
             tools:text="Racha Actual: 7 Días" />
 
@@ -109,8 +110,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/color_gris_texto_secundario"
             android:textSize="15sp"
-            tools:text="Tasa de Fallos: 12% · Bloques Abandonados" />
+            tools:text="Tasa de Fallos: 12% · 3 bloques abandonados" />
 
     </LinearLayout>
 
@@ -141,7 +143,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/poppins_semibold"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:textSize="18sp"
             tools:text="350 Puntos" />
 
@@ -151,11 +153,11 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_semibold"
             android:text="Tienda de Temas"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:textSize="13sp"
-            app:backgroundTint="#FFFFFF"
+            app:backgroundTint="@color/white"
             app:cornerRadius="24dp"
-            app:rippleColor="#DCDCDC" />
+            app:rippleColor="@color/color_gris_ripple" />
     </LinearLayout>
 
     <TextView
@@ -167,7 +169,7 @@
         android:gravity="center"
         android:fontFamily="@font/poppins_semibold"
         android:text="Pomodoros Completados por Día"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -195,14 +197,54 @@
             android:orientation="horizontal" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tvTituloActividades"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="24dp"
+        android:gravity="center"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Actividades Recientes"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llGraficaContenedor" />
+
+    <LinearLayout
+        android:id="@+id/llActividadesRecientes"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/carta_oscura"
+        android:orientation="vertical"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTituloActividades"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView">
+
+        <TextView
+            android:id="@+id/tvActividadesRecientes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_regular"
+            android:textColor="@color/color_gris_texto_secundario"
+            android:textSize="13sp"
+            android:text="Aún no hay actividades completadas" />
+    </LinearLayout>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#1E1E24"
+        android:background="@color/color_fondo_barra_navegacion"
         app:itemIconSize="28dp"
-        app:itemIconTint="#FFFFFF"
-        app:itemTextColor="#FFFFFF"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

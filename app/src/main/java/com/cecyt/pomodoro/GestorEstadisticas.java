@@ -2,6 +2,7 @@ package com.cecyt.pomodoro;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class GestorEstadisticas {
@@ -39,6 +40,29 @@ public class GestorEstadisticas {
     public int getPomodorosFallados() { return prefs.getInt("pomodoros_fallados", 0); }
     public int getPuntos() { return prefs.getInt("puntos", 0); }
     public int getRachaActual() { return prefs.getInt("racha_actual", 0); }
+
+    public void registrarActividadCompletada(String nombreTarea) {
+        SharedPreferences.Editor editor = prefs.edit();
+        int total = prefs.getInt("actividades_total", 0);
+        editor.putString("actividad_" + total, nombreTarea);
+        editor.putInt("actividades_total", total + 1);
+        editor.apply();
+    }
+
+    public ArrayList<String> getActividadesRecientes(int maxCantidad) {
+        ArrayList<String> actividades = new ArrayList<>();
+        int total = prefs.getInt("actividades_total", 0);
+        int inicio = Math.max(0, total - maxCantidad);
+
+        for (int i = total - 1; i >= inicio; i--) {
+            String actividad = prefs.getString("actividad_" + i, null);
+            if (actividad != null) {
+                actividades.add(actividad);
+            }
+        }
+
+        return actividades;
+    }
 
     public int[] getDatosSemana() {
         return new int[]{

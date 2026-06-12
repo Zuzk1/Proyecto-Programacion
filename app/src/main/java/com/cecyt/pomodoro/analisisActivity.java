@@ -1,17 +1,16 @@
 package com.cecyt.pomodoro;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
+
+import java.util.ArrayList;
 
 public class analisisActivity extends BaseActivity {
 
@@ -26,6 +25,7 @@ public class analisisActivity extends BaseActivity {
 
             gestor = new GestorEstadisticas(this);
             cargarDatosReales();
+            cargarActividadesRecientes();
 
             int[] datosPomodorosSemana = gestor.getDatosSemana();
             dibujarGraficaDeBarras(datosPomodorosSemana);
@@ -59,15 +59,7 @@ public class analisisActivity extends BaseActivity {
         ((TextView) findViewById(R.id.tvPuntos)).setText(puntos + " Puntos");
 
         TextView tvRacha = findViewById(R.id.tvRachaActual);
-        String textoRacha = "Racha Actual: " + racha + " Días (¡Pérdida en caso de Fallo!)";
-        SpannableString spannableRacha = new SpannableString(textoRacha);
-        int inicioRojoRacha = textoRacha.indexOf("(");
-
-        if (inicioRojoRacha != -1) {
-            spannableRacha.setSpan(new ForegroundColorSpan(Color.parseColor("#A0A0A0")), 0, inicioRojoRacha, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannableRacha.setSpan(new ForegroundColorSpan(Color.parseColor("#E57373")), inicioRojoRacha, textoRacha.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        tvRacha.setText(spannableRacha);
+        tvRacha.setText("Racha Actual: " + racha + " Días");
 
         float porcentajeFallo = 0;
         int intentosTotales = completados + fallos;
@@ -77,15 +69,23 @@ public class analisisActivity extends BaseActivity {
 
         TextView tvFallos = findViewById(R.id.tvTasaFallos);
         String stringPorcentaje = String.format("%.0f%%", porcentajeFallo);
-        String textoFallos = "Tasa de Fallos: " + stringPorcentaje + " · Bloques Abandonados (" + fallos + ")";
-        SpannableString spannableFallos = new SpannableString(textoFallos);
-        int inicioRojoFallos = textoFallos.indexOf("·");
+        tvFallos.setText("Tasa de Fallos: " + stringPorcentaje + " · " + fallos + " bloques abandonados");
+    }
 
-        if (inicioRojoFallos != -1) {
-            spannableFallos.setSpan(new ForegroundColorSpan(Color.parseColor("#A0A0A0")), 0, inicioRojoFallos, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannableFallos.setSpan(new ForegroundColorSpan(Color.parseColor("#E57373")), inicioRojoFallos, textoFallos.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    private void cargarActividadesRecientes() {
+        ArrayList<String> actividades = gestor.getActividadesRecientes(5);
+        TextView tvActividades = findViewById(R.id.tvActividadesRecientes);
+
+        if (actividades.isEmpty()) {
+            tvActividades.setText("Aún no hay actividades completadas");
+            return;
         }
-        tvFallos.setText(spannableFallos);
+
+        StringBuilder textoActividades = new StringBuilder();
+        for (String actividad : actividades) {
+            textoActividades.append("• ").append(actividad).append("\n");
+        }
+        tvActividades.setText(textoActividades.toString().trim());
     }
 
     private void dibujarGraficaDeBarras(int[] datos) {
@@ -132,14 +132,13 @@ public class analisisActivity extends BaseActivity {
 
             TextView tvDia = new TextView(this);
             tvDia.setText(dias[i]);
-            tvDia.setTextColor(Color.parseColor("#A0A0A0"));
+            tvDia.setTextColor(ContextCompat.getColor(this, R.color.color_gris_texto_secundario));
             tvDia.setTextSize(12f);
             tvDia.setGravity(Gravity.CENTER);
 
             columna.addView(areaBarra);
             columna.addView(tvDia);
             llContenedorBarras.addView(columna);
-            //HolaaA
         }
     }
 }
