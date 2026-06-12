@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="36dp"
+    android:background="@drawable/bg_tarjeta_permiso"
+    android:paddingHorizontal="24dp"
+    android:paddingVertical="22dp">
+
+    <TextView
+        android:id="@+id/tvTituloOpcionesTarea"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_semibold"
+        android:gravity="center"
+        android:text="¿Qué deseas hacer con esta tarea?"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnFijarTarea"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="18dp"
+        android:backgroundTint="@color/color_azul_principal"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Fijar como Tarea Activa"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:cornerRadius="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTituloOpcionesTarea" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnEditarTarea"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/color_fondo_tarjeta"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Editar Texto"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:cornerRadius="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnFijarTarea" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnEliminarTarea"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/color_rojo_peligro"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Eliminar Tarea"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:cornerRadius="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnEditarTarea" />
+
+    <TextView
+        android:id="@+id/tvCancelarOpcionesTarea"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:padding="4dp"
+        android:fontFamily="@font/poppins_regular"
+        android:text="Cancelar"
+        android:textColor="@color/color_gris_texto_terciario"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnEliminarTarea" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
