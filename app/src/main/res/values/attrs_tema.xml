@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Atributos de tema usados por la Tienda de Temas para recolorear toda la app -->
+    <attr name="themeFondoPrincipal" format="color" />
+    <attr name="themeFondoTarjeta" format="color" />
+    <attr name="themeFondoTarjetaSecundaria" format="color" />
+    <attr name="themeFondoBarraNavegacion" format="color" />
+
+    <attr name="themeTextoPrimario" format="color" />
+    <attr name="themeTextoSecundario" format="color" />
+    <attr name="themeTextoTerciario" format="color" />
+
+    <attr name="themeRipple" format="color" />
+    <attr name="themePuntoInactivo" format="color" />
+    <attr name="themeCicloInactivo" format="color" />
+    <attr name="themeIconoApagado" format="color" />
+    <attr name="themeIndicadorApagado" format="color" />
+    <attr name="themeFondoAlerta" format="color" />
+    <attr name="themeAlertaTextoSecundario" format="color" />
+    <attr name="themeAlertaTextoTerciario" format="color" />
+
+    <attr name="themeAcento" format="color" />
+    <attr name="themeAcentoClaro" format="color" />
+    <attr name="themeAcentoContenedor" format="color" />
+    <attr name="themeAcentoOverlay10" format="color" />
+    <attr name="themeAcentoOverlay20" format="color" />
+    <attr name="themeSobreAcento" format="color" />
+</resources>

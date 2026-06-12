@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ============ NEUTROS DEL TEMA OSCURO ============ -->
+    <color name="tema_oscuro_fondo_principal">#1F1F24</color>
+    <color name="tema_oscuro_fondo_tarjeta">#26262D</color>
+    <color name="tema_oscuro_fondo_tarjeta_secundaria">#2D2D36</color>
+    <color name="tema_oscuro_fondo_barra_navegacion">#1E1E24</color>
+    <color name="tema_oscuro_texto_primario">#FFFFFF</color>
+    <color name="tema_oscuro_texto_secundario">#A0A0A0</color>
+    <color name="tema_oscuro_texto_terciario">#888888</color>
+    <color name="tema_oscuro_ripple">#DCDCDC</color>
+    <color name="tema_oscuro_punto_inactivo">#33FFFFFF</color>
+    <color name="tema_oscuro_ciclo_inactivo">#444444</color>
+    <color name="tema_oscuro_icono_apagado">#8A8A8A</color>
+    <color name="tema_oscuro_indicador_apagado">#5A5A5A</color>
+    <color name="tema_oscuro_fondo_alerta">#1A0A0A</color>
+    <color name="tema_oscuro_alerta_texto_secundario">#FFCDD2</color>
+    <color name="tema_oscuro_alerta_texto_terciario">#FF8A80</color>
+
+    <!-- ============ NEUTROS DEL TEMA CLARO ============ -->
+    <color name="tema_claro_fondo_principal">#F0F0F5</color>
+    <color name="tema_claro_fondo_tarjeta">#FFFFFF</color>
+    <color name="tema_claro_fondo_tarjeta_secundaria">#E8E8EF</color>
+    <color name="tema_claro_fondo_barra_navegacion">#FFFFFF</color>
+    <color name="tema_claro_texto_primario">#1C1C21</color>
+    <color name="tema_claro_texto_secundario">#6E6E78</color>
+    <color name="tema_claro_texto_terciario">#94949C</color>
+    <color name="tema_claro_ripple">#D0D0D6</color>
+    <color name="tema_claro_punto_inactivo">#331C1C21</color>
+    <color name="tema_claro_ciclo_inactivo">#DADAE0</color>
+    <color name="tema_claro_icono_apagado">#B5B5BD</color>
+    <color name="tema_claro_indicador_apagado">#DADAE0</color>
+    <color name="tema_claro_fondo_alerta">#FFFFFF</color>
+    <color name="tema_claro_alerta_texto_secundario">#C62828</color>
+    <color name="tema_claro_alerta_texto_terciario">#D84315</color>
+
+    <!-- ============ ACENTO AZUL (tema gratuito por defecto) ============ -->
+    <color name="acento_azul">#2196F3</color>
+    <color name="acento_azul_claro">#64B5F6</color>
+    <color name="acento_azul_contenedor_oscuro">#1A3A5C</color>
+    <color name="acento_azul_contenedor_claro">#D4E9FD</color>
+    <color name="acento_azul_overlay_10">#1A2196F3</color>
+    <color name="acento_azul_overlay_20">#332196F3</color>
+
+    <!-- ============ ACENTO NARANJA ============ -->
+    <color name="acento_naranja">#FF9800</color>
+    <color name="acento_naranja_claro">#FFB74D</color>
+    <color name="acento_naranja_contenedor_oscuro">#4A3214</color>
+    <color name="acento_naranja_contenedor_claro">#FFE3C2</color>
+    <color name="acento_naranja_overlay_10">#1AFF9800</color>
+    <color name="acento_naranja_overlay_20">#33FF9800</color>
+
+    <!-- ============ ACENTO ROJO ============ -->
+    <color name="acento_rojo">#E53935</color>
+    <color name="acento_rojo_claro">#EF5350</color>
+    <color name="acento_rojo_contenedor_oscuro">#4A1A18</color>
+    <color name="acento_rojo_contenedor_claro">#FBD9D8</color>
+    <color name="acento_rojo_overlay_10">#1AE53935</color>
+    <color name="acento_rojo_overlay_20">#33E53935</color>
+
+    <!-- ============ ACENTO AZUL MARINO ============ -->
+    <color name="acento_marino">#2E5AAC</color>
+    <color name="acento_marino_claro">#6E94D4</color>
+    <color name="acento_marino_contenedor_oscuro">#16264A</color>
+    <color name="acento_marino_contenedor_claro">#D7E0F4</color>
+    <color name="acento_marino_overlay_10">#1A2E5AAC</color>
+    <color name="acento_marino_overlay_20">#332E5AAC</color>
+
+    <!-- ============ ACENTO MORADO ============ -->
+    <color name="acento_morado">#9C27B0</color>
+    <color name="acento_morado_claro">#CE93D8</color>
+    <color name="acento_morado_contenedor_oscuro">#3A1740</color>
+    <color name="acento_morado_contenedor_claro">#F2D9F6</color>
+    <color name="acento_morado_overlay_10">#1A9C27B0</color>
+    <color name="acento_morado_overlay_20">#339C27B0</color>
+
+    <!-- ============ ACENTO VERDE ============ -->
+    <color name="acento_verde">#43A047</color>
+    <color name="acento_verde_claro">#81C784</color>
+    <color name="acento_verde_contenedor_oscuro">#1B3A1D</color>
+    <color name="acento_verde_contenedor_claro">#D7F0D9</color>
+    <color name="acento_verde_overlay_10">#1A43A047</color>
+    <color name="acento_verde_overlay_20">#3343A047</color>
+
+    <!-- ============ ACENTO ROSA ============ -->
+    <color name="acento_rosa">#E91E63</color>
+    <color name="acento_rosa_claro">#F48FB1</color>
+    <color name="acento_rosa_contenedor_oscuro">#4A1530</color>
+    <color name="acento_rosa_contenedor_claro">#FCDDE9</color>
+    <color name="acento_rosa_overlay_10">#1AE91E63</color>
+    <color name="acento_rosa_overlay_20">#33E91E63</color>
+
+</resources>
