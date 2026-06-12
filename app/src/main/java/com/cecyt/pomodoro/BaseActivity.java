@@ -19,6 +19,7 @@ public class BaseActivity extends AppCompatActivity {
     private ObjectAnimator animacionMenuActual;
     private View vistaIconoMenuActual;
     private int idMenuActual = 0;
+    private boolean animacionMenuPausada = false;
 
     protected void configurarNavegacion(int idItemSeleccionado) {
         this.idMenuActual = idItemSeleccionado;
@@ -135,7 +136,11 @@ public class BaseActivity extends AppCompatActivity {
 
         View vistaIcono = menuView.getChildAt(indiceSeleccionado);
         if (vistaIcono != null) {
-            iniciarAnimacionIconoMenu(vistaIcono);
+            if (animacionMenuPausada) {
+                vistaIconoMenuActual = vistaIcono;
+            } else {
+                iniciarAnimacionIconoMenu(vistaIcono);
+            }
         }
     }
 
@@ -162,10 +167,12 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void pausarAnimacionMenuSuave() {
+        animacionMenuPausada = true;
         detenerAnimacionIconoMenuSuave();
     }
 
     protected void reanudarAnimacionMenuSuave() {
+        animacionMenuPausada = false;
         if (vistaIconoMenuActual != null) {
             iniciarAnimacionIconoMenu(vistaIconoMenuActual);
         }
