@@ -18,6 +18,8 @@ public class CronometroService extends Service {
 
     public static final String ACCION_INICIAR = "com.cecyt.pomodoro.ACCION_INICIAR_SERVICIO";
     public static final String ACCION_DETENER = "com.cecyt.pomodoro.ACCION_DETENER_SERVICIO";
+    public static final String ACCION_PAUSAR = "com.cecyt.pomodoro.ACCION_PAUSAR_SERVICIO";
+    public static final String ACCION_REANUDAR = "com.cecyt.pomodoro.ACCION_REANUDAR_SERVICIO";
     public static final String EXTRA_TIEMPO_RESTANTE = "extra_tiempo_restante";
     public static final String EXTRA_ES_DESCANSO = "extra_es_descanso";
 
@@ -27,6 +29,9 @@ public class CronometroService extends Service {
 
     private final Handler manejador = new Handler(Looper.getMainLooper());
     private Runnable accionFinalizacion;
+    private long finEstimadoActual;
+    private boolean esDescansoActual;
+    private long tiempoRestantePausado = -1;
 
     @Override
     public void onCreate() {
@@ -49,6 +54,14 @@ public class CronometroService extends Service {
             detenerServicio();
             return START_NOT_STICKY;
         }
+        if (ACCION_PAUSAR.equals(accion)) {
+            pausarSeguimiento();
+            return START_STICKY;
+        }
+        if (ACCION_REANUDAR.equals(accion)) {
+            reanudarSeguimiento();
+            return START_STICKY;
+        }
 
         long tiempoRestante = intent.getLongExtra(EXTRA_TIEMPO_RESTANTE, 0);
         boolean esDescanso = intent.getBooleanExtra(EXTRA_ES_DESCANSO, false);
@@ -63,6 +76,8 @@ public class CronometroService extends Service {
         }
 
         long finEstimado = System.currentTimeMillis() + tiempoRestante;
+        finEstimadoActual = finEstimado;
+        esDescansoActual = esDescanso;
 
         Log.d(ETIQUETA_DEPURACION, "Servicio: llamando startForeground");
         startForeground(ID_NOTIFICACION_PROGRESO, construirNotificacionProgreso(finEstimado, esDescanso));
@@ -73,6 +88,41 @@ public class CronometroService extends Service {
             detenerServicio();
         };
         manejador.postDelayed(accionFinalizacion, tiempoRestante);
+    }
+
+    private void pausarSeguimiento() {
+        if (accionFinalizacion == null) {
+            return;
+        }
+        manejador.removeCallbacks(accionFinalizacion);
+        accionFinalizacion = null;
+
+        tiempoRestantePausado = finEstimadoActual - System.currentTimeMillis();
+        if (tiempoRestantePausado < 0) {
+            tiempoRestantePausado = 0;
+        }
+        Log.d(ETIQUETA_DEPURACION, "Servicio: pausado, tiempoRestantePausado=" + tiempoRestantePausado);
+
+        android.app.Notification notificacionPausada = new NotificationCompat.Builder(this, GestorAlertas.CANAL_PROGRESO_ID)
+                .setSmallIcon(R.drawable.ic_gato_notificacion)
+                .setContentTitle(esDescansoActual ? "Descanso en pausa" : "Sesión de enfoque en pausa")
+                .setContentText("Atiende la alerta para continuar")
+                .setOngoing(true)
+                .setOnlyAlertOnce(true)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .build();
+        NotificationManagerCompat.from(this).notify(ID_NOTIFICACION_PROGRESO, notificacionPausada);
+    }
+
+    private void reanudarSeguimiento() {
+        if (tiempoRestantePausado < 0) {
+            stopSelf();
+            return;
+        }
+        long tiempoRestante = tiempoRestantePausado;
+        tiempoRestantePausado = -1;
+        Log.d(ETIQUETA_DEPURACION, "Servicio: reanudando con tiempoRestante=" + tiempoRestante);
+        iniciarSeguimiento(tiempoRestante, esDescansoActual);
     }
 
     private android.app.Notification construirNotificacionProgreso(long finEstimado, boolean esDescanso) {

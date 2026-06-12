@@ -1,56 +1,39 @@
 package com.cecyt.pomodoro;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import android.content.Intent;
-import android.widget.Button;
-import android.widget.NumberPicker;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
+public class personalizacionActivity extends BaseActivity {
 
-public class personalizacionActivity extends AppCompatActivity {
-
-    private NumberPicker npTrabajo;
-    private NumberPicker npDescansoCorto;
-    private NumberPicker npDescansoLargo;
-    private Button btnGuardar;
+    private TextView tvPuntosDisponibles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.personalizacion_main);
 
-        // 1. Vinculación de componentes con el XML
-        npTrabajo = findViewById(R.id.npTrabajo);
-        npDescansoCorto = findViewById(R.id.npDescansoCorto);
-        npDescansoLargo = findViewById(R.id.npDescansoLargo);
-        btnGuardar = findViewById(R.id.btnGuardarConfig);
-
-        // 2. Configuración del selector para bloques de Trabajo (1 a 60 minutos)
-        npTrabajo.setMinValue(1);
-        npTrabajo.setMaxValue(60);
-        npTrabajo.setValue(25); // Valor por defecto (25 mins)
-
-        // 3. Configuración del selector para Descanso Corto (1 a 20 minutos)
-        npDescansoCorto.setMinValue(1);
-        npDescansoCorto.setMaxValue(20);
-        npDescansoCorto.setValue(5); // Valor por defecto (5 mins)
-
-        // 4. Configuración del selector para Descanso Largo (1 a 60 minutos)
-        npDescansoLargo.setMinValue(1);
-        npDescansoLargo.setMaxValue(60);
-        npDescansoLargo.setValue(15); // Valor por defecto (15 mins)
-
-        // 5. Acción del botón para guardar y regresar a la pantalla del cronómetro
-        btnGuardar.setOnClickListener(v -> {
-            // En pasos posteriores de su proyecto aquí guardarán los valores con SharedPreferences
-
-            // Regresar a la pantalla principal
-            Intent intent = new Intent(personalizacionActivity.this, CronometroActivity.class);
-            startActivity(intent);
-            finish(); // Finaliza esta actividad para no saturar el historial de pantallas
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
         });
+
+        tvPuntosDisponibles = findViewById(R.id.tvPuntosDisponibles);
+        actualizarPuntos();
+
+        RecyclerView rvTemas = findViewById(R.id.rvTemas);
+        rvTemas.setAdapter(new TemasAdapter(this, () -> recreate()));
+
+        findViewById(R.id.ivAtras).setOnClickListener(v -> finish());
+    }
+
+    private void actualizarPuntos() {
+        float puntos = new GestorEstadisticas(this).getPuntos();
+        tvPuntosDisponibles.setText(GestorEstadisticas.formatearPuntos(puntos) + " Puntos");
     }
 }

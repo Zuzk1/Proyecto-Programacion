@@ -11,14 +11,21 @@ public class GestorEstadisticas {
 
     public GestorEstadisticas(Context context) {
         prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        if (!prefs.getBoolean("reseteo_puntos_v2", false)) {
+            prefs.edit()
+                    .remove("puntos")
+                    .putFloat("puntos", 0f)
+                    .putBoolean("reseteo_puntos_v2", true)
+                    .apply();
+        }
     }
 
-    public void registrarPomodoroExitoso(int minutosEnfoque, int puntosGanados) {
+    public void registrarPomodoroExitoso(int minutosEnfoque, float puntosGanados) {
         SharedPreferences.Editor editor = prefs.edit();
 
         editor.putInt("minutos_totales", getMinutosTotales() + minutosEnfoque);
         editor.putInt("pomodoros_completados", getPomodorosCompletados() + 1);
-        editor.putInt("puntos", getPuntos() + puntosGanados);
+        editor.putFloat("puntos", getPuntos() + puntosGanados);
         editor.putInt("racha_actual", getRachaActual() + 1);
 
         int diaSemana = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
@@ -32,14 +39,29 @@ public class GestorEstadisticas {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("pomodoros_fallados", getPomodorosFallados() + 1);
         editor.putInt("racha_actual", 0);
+        editor.putFloat("puntos", Math.max(0f, getPuntos() - 75));
         editor.apply();
     }
-//holaaA
+
     public int getMinutosTotales() { return prefs.getInt("minutos_totales", 0); }
     public int getPomodorosCompletados() { return prefs.getInt("pomodoros_completados", 0); }
     public int getPomodorosFallados() { return prefs.getInt("pomodoros_fallados", 0); }
-    public int getPuntos() { return prefs.getInt("puntos", 0); }
+    public float getPuntos() { return prefs.getFloat("puntos", 0f); }
     public int getRachaActual() { return prefs.getInt("racha_actual", 0); }
+
+    public static String formatearPuntos(float puntos) {
+        if (puntos == Math.floor(puntos)) {
+            return String.valueOf((int) puntos);
+        }
+        return String.format(java.util.Locale.getDefault(), "%.1f", puntos);
+    }
+
+    public boolean gastarPuntos(int costo) {
+        float puntosActuales = getPuntos();
+        if (puntosActuales < costo) return false;
+        prefs.edit().putFloat("puntos", puntosActuales - costo).apply();
+        return true;
+    }
 
     public void registrarActividadCompletada(String nombreTarea) {
         SharedPreferences.Editor editor = prefs.edit();

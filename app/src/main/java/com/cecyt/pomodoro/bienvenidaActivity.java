@@ -23,6 +23,7 @@ public class bienvenidaActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        new GestorTemas(this).aplicarTema(this);
         super.onCreate(savedInstanceState);
 
         preferencias = getSharedPreferences("PreferenciasCajaFacil", MODE_PRIVATE);

@@ -8,8 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.content.ContextCompat;
-
 import java.util.ArrayList;
 
 public class analisisActivity extends BaseActivity {
@@ -48,7 +46,7 @@ public class analisisActivity extends BaseActivity {
         int completados = gestor.getPomodorosCompletados();
         int fallos = gestor.getPomodorosFallados();
         int racha = gestor.getRachaActual();
-        int puntos = gestor.getPuntos();
+        float puntos = gestor.getPuntos();
 
         int horas = minutosTotales / 60;
         int minutosRestantes = minutosTotales % 60;
@@ -56,7 +54,7 @@ public class analisisActivity extends BaseActivity {
         ((TextView) findViewById(R.id.tvTiempoTotal)).setText(textoTiempo);
 
         ((TextView) findViewById(R.id.tvPomodorosCompletados)).setText("Pomodoros Completados: " + completados);
-        ((TextView) findViewById(R.id.tvPuntos)).setText(puntos + " Puntos");
+        ((TextView) findViewById(R.id.tvPuntos)).setText(GestorEstadisticas.formatearPuntos(puntos) + " Puntos");
 
         TextView tvRacha = findViewById(R.id.tvRachaActual);
         tvRacha.setText("Racha Actual: " + racha + " Días");
@@ -132,7 +130,7 @@ public class analisisActivity extends BaseActivity {
 
             TextView tvDia = new TextView(this);
             tvDia.setText(dias[i]);
-            tvDia.setTextColor(ContextCompat.getColor(this, R.color.color_gris_texto_secundario));
+            tvDia.setTextColor(TemaUtils.resolverColor(this, R.attr.themeTextoSecundario));
             tvDia.setTextSize(12f);
             tvDia.setGravity(Gravity.CENTER);
 

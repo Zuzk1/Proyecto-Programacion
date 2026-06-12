@@ -1,19 +1,219 @@
 <resources>
 
-    <style name="Base.Theme.Pomodoro" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/color_azul_principal</item>
-        <item name="colorSecondary">@color/color_azul_principal</item>
-        <item name="colorOnSecondaryContainer">@color/white</item>
-        <item name="colorSecondaryContainer">@color/color_azul_contenedor_secundario</item>
+    <!-- ============ BASE OSCURA (compartida por todos los temas oscuros) ============ -->
+    <style name="Theme.Pomodoro.Base.Oscuro" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="themeFondoPrincipal">@color/tema_oscuro_fondo_principal</item>
+        <item name="themeFondoTarjeta">@color/tema_oscuro_fondo_tarjeta</item>
+        <item name="themeFondoTarjetaSecundaria">@color/tema_oscuro_fondo_tarjeta_secundaria</item>
+        <item name="themeFondoBarraNavegacion">@color/tema_oscuro_fondo_barra_navegacion</item>
+        <item name="themeTextoPrimario">@color/tema_oscuro_texto_primario</item>
+        <item name="themeTextoSecundario">@color/tema_oscuro_texto_secundario</item>
+        <item name="themeTextoTerciario">@color/tema_oscuro_texto_terciario</item>
+        <item name="themeRipple">@color/tema_oscuro_ripple</item>
+        <item name="themePuntoInactivo">@color/tema_oscuro_punto_inactivo</item>
+        <item name="themeCicloInactivo">@color/tema_oscuro_ciclo_inactivo</item>
+        <item name="themeIconoApagado">@color/tema_oscuro_icono_apagado</item>
+        <item name="themeIndicadorApagado">@color/tema_oscuro_indicador_apagado</item>
+        <item name="themeFondoAlerta">@color/tema_oscuro_fondo_alerta</item>
+        <item name="themeAlertaTextoSecundario">@color/tema_oscuro_alerta_texto_secundario</item>
+        <item name="themeAlertaTextoTerciario">@color/tema_oscuro_alerta_texto_terciario</item>
+        <item name="themeSobreAcento">@color/white</item>
+
+        <item name="android:colorBackground">?attr/themeFondoPrincipal</item>
+        <item name="colorSurface">?attr/themeFondoTarjeta</item>
+        <item name="colorOnBackground">?attr/themeTextoPrimario</item>
+        <item name="colorOnSurface">?attr/themeTextoPrimario</item>
+        <item name="colorOnPrimary">?attr/themeSobreAcento</item>
+        <item name="colorOnSecondaryContainer">?attr/themeTextoPrimario</item>
     </style>
 
-    <style name="Theme.Pomodoro" parent="Base.Theme.Pomodoro" />
+    <!-- ============ BASE CLARA (compartida por todos los temas claros) ============ -->
+    <style name="Theme.Pomodoro.Base.Claro" parent="Theme.Material3.Light.NoActionBar">
+        <item name="themeFondoPrincipal">@color/tema_claro_fondo_principal</item>
+        <item name="themeFondoTarjeta">@color/tema_claro_fondo_tarjeta</item>
+        <item name="themeFondoTarjetaSecundaria">@color/tema_claro_fondo_tarjeta_secundaria</item>
+        <item name="themeFondoBarraNavegacion">@color/tema_claro_fondo_barra_navegacion</item>
+        <item name="themeTextoPrimario">@color/tema_claro_texto_primario</item>
+        <item name="themeTextoSecundario">@color/tema_claro_texto_secundario</item>
+        <item name="themeTextoTerciario">@color/tema_claro_texto_terciario</item>
+        <item name="themeRipple">@color/tema_claro_ripple</item>
+        <item name="themePuntoInactivo">@color/tema_claro_punto_inactivo</item>
+        <item name="themeCicloInactivo">@color/tema_claro_ciclo_inactivo</item>
+        <item name="themeIconoApagado">@color/tema_claro_icono_apagado</item>
+        <item name="themeIndicadorApagado">@color/tema_claro_indicador_apagado</item>
+        <item name="themeFondoAlerta">@color/tema_claro_fondo_alerta</item>
+        <item name="themeAlertaTextoSecundario">@color/tema_claro_alerta_texto_secundario</item>
+        <item name="themeAlertaTextoTerciario">@color/tema_claro_alerta_texto_terciario</item>
+        <item name="themeSobreAcento">@color/white</item>
 
-    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/color_fondo_splash</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
-        <item name="postSplashScreenTheme">@style/Theme.Pomodoro</item>
+        <item name="android:colorBackground">?attr/themeFondoPrincipal</item>
+        <item name="colorSurface">?attr/themeFondoTarjeta</item>
+        <item name="colorOnBackground">?attr/themeTextoPrimario</item>
+        <item name="colorOnSurface">?attr/themeTextoPrimario</item>
+        <item name="colorOnPrimary">?attr/themeSobreAcento</item>
+        <item name="colorOnSecondaryContainer">?attr/themeTextoPrimario</item>
     </style>
+
+    <!-- ============ TEMAS OSCUROS (uno por color de acento) ============ -->
+
+    <style name="Theme.Pomodoro.Dark.Azul" parent="Theme.Pomodoro.Base.Oscuro">
+        <item name="themeAcento">@color/acento_azul</item>
+        <item name="themeAcentoClaro">@color/acento_azul_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_azul_contenedor_oscuro</item>
+        <item name="themeAcentoOverlay10">@color/acento_azul_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_azul_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <style name="Theme.Pomodoro.Dark.Naranja" parent="Theme.Pomodoro.Base.Oscuro">
+        <item name="themeAcento">@color/acento_naranja</item>
+        <item name="themeAcentoClaro">@color/acento_naranja_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_naranja_contenedor_oscuro</item>
+        <item name="themeAcentoOverlay10">@color/acento_naranja_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_naranja_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <style name="Theme.Pomodoro.Dark.Rojo" parent="Theme.Pomodoro.Base.Oscuro">
+        <item name="themeAcento">@color/acento_rojo</item>
+        <item name="themeAcentoClaro">@color/acento_rojo_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_rojo_contenedor_oscuro</item>
+        <item name="themeAcentoOverlay10">@color/acento_rojo_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_rojo_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <style name="Theme.Pomodoro.Dark.Marino" parent="Theme.Pomodoro.Base.Oscuro">
+        <item name="themeAcento">@color/acento_marino</item>
+        <item name="themeAcentoClaro">@color/acento_marino_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_marino_contenedor_oscuro</item>
+        <item name="themeAcentoOverlay10">@color/acento_marino_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_marino_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <style name="Theme.Pomodoro.Dark.Morado" parent="Theme.Pomodoro.Base.Oscuro">
+        <item name="themeAcento">@color/acento_morado</item>
+        <item name="themeAcentoClaro">@color/acento_morado_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_morado_contenedor_oscuro</item>
+        <item name="themeAcentoOverlay10">@color/acento_morado_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_morado_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <style name="Theme.Pomodoro.Dark.Verde" parent="Theme.Pomodoro.Base.Oscuro">
+        <item name="themeAcento">@color/acento_verde</item>
+        <item name="themeAcentoClaro">@color/acento_verde_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_verde_contenedor_oscuro</item>
+        <item name="themeAcentoOverlay10">@color/acento_verde_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_verde_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <style name="Theme.Pomodoro.Dark.Rosa" parent="Theme.Pomodoro.Base.Oscuro">
+        <item name="themeAcento">@color/acento_rosa</item>
+        <item name="themeAcentoClaro">@color/acento_rosa_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_rosa_contenedor_oscuro</item>
+        <item name="themeAcentoOverlay10">@color/acento_rosa_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_rosa_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <!-- ============ TEMAS CLAROS (uno por color de acento) ============ -->
+
+    <style name="Theme.Pomodoro.Light.Azul" parent="Theme.Pomodoro.Base.Claro">
+        <item name="themeAcento">@color/acento_azul</item>
+        <item name="themeAcentoClaro">@color/acento_azul_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_azul_contenedor_claro</item>
+        <item name="themeAcentoOverlay10">@color/acento_azul_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_azul_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <style name="Theme.Pomodoro.Light.Naranja" parent="Theme.Pomodoro.Base.Claro">
+        <item name="themeAcento">@color/acento_naranja</item>
+        <item name="themeAcentoClaro">@color/acento_naranja_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_naranja_contenedor_claro</item>
+        <item name="themeAcentoOverlay10">@color/acento_naranja_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_naranja_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <style name="Theme.Pomodoro.Light.Rojo" parent="Theme.Pomodoro.Base.Claro">
+        <item name="themeAcento">@color/acento_rojo</item>
+        <item name="themeAcentoClaro">@color/acento_rojo_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_rojo_contenedor_claro</item>
+        <item name="themeAcentoOverlay10">@color/acento_rojo_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_rojo_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <style name="Theme.Pomodoro.Light.Marino" parent="Theme.Pomodoro.Base.Claro">
+        <item name="themeAcento">@color/acento_marino</item>
+        <item name="themeAcentoClaro">@color/acento_marino_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_marino_contenedor_claro</item>
+        <item name="themeAcentoOverlay10">@color/acento_marino_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_marino_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <style name="Theme.Pomodoro.Light.Morado" parent="Theme.Pomodoro.Base.Claro">
+        <item name="themeAcento">@color/acento_morado</item>
+        <item name="themeAcentoClaro">@color/acento_morado_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_morado_contenedor_claro</item>
+        <item name="themeAcentoOverlay10">@color/acento_morado_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_morado_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <style name="Theme.Pomodoro.Light.Verde" parent="Theme.Pomodoro.Base.Claro">
+        <item name="themeAcento">@color/acento_verde</item>
+        <item name="themeAcentoClaro">@color/acento_verde_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_verde_contenedor_claro</item>
+        <item name="themeAcentoOverlay10">@color/acento_verde_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_verde_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <style name="Theme.Pomodoro.Light.Rosa" parent="Theme.Pomodoro.Base.Claro">
+        <item name="themeAcento">@color/acento_rosa</item>
+        <item name="themeAcentoClaro">@color/acento_rosa_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_rosa_contenedor_claro</item>
+        <item name="themeAcentoOverlay10">@color/acento_rosa_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_rosa_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <!-- Tema por defecto de la aplicación (se sobreescribe en runtime según la preferencia guardada) -->
+    <style name="Theme.Pomodoro" parent="Theme.Pomodoro.Dark.Azul" />
 
     <style name="EstiloTextoNavegador">
         <item name="android:textSize">14sp</item>

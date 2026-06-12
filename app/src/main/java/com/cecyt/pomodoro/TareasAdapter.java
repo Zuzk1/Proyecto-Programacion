@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
@@ -40,7 +39,7 @@ public class TareasAdapter extends RecyclerView.Adapter<TareasAdapter.TareaViewH
         holder.tvTextoTarea.setText(tarea);
 
 
-        holder.tvTextoTarea.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.white));
+        holder.tvTextoTarea.setTextColor(TemaUtils.resolverColor(holder.itemView.getContext(), R.attr.themeTextoPrimario));
         holder.tvTextoTarea.setPadding(40, 45, 40, 45);
 
 

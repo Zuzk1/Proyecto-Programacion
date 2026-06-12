@@ -20,11 +20,22 @@ public class BaseActivity extends AppCompatActivity {
     private View vistaIconoMenuActual;
     private int idMenuActual = 0;
     private boolean animacionMenuPausada = false;
+    private GestorTemas.Tema temaAlCrear;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        GestorTemas gestorTemas = new GestorTemas(this);
+        temaAlCrear = gestorTemas.getTemaActual();
+        gestorTemas.aplicarTema(this);
+        super.onCreate(savedInstanceState);
+    }
 
     protected void configurarNavegacion(int idItemSeleccionado) {
         this.idMenuActual = idItemSeleccionado;
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         if (bottomNavigationView == null) return;
+
+        bottomNavigationView.setBackgroundColor(TemaUtils.resolverColor(this, R.attr.themeFondoBarraNavegacion));
 
         aplicarInsetsBarrasSistema();
 
@@ -73,6 +84,20 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (!alertaActivity.estaActiva && GestorAlertas.hayInfraccionPendiente(this)) {
+            Intent intentAlerta = new Intent(this, alertaActivity.class);
+            intentAlerta.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intentAlerta.putExtra(GestorAlertas.EXTRA_ES_INFRACCION, true);
+            startActivity(intentAlerta);
+            return;
+        }
+
+        if (temaAlCrear != new GestorTemas(this).getTemaActual()) {
+            recreate();
+            return;
+        }
+
         if (bottomNavigationView != null && idMenuActual != 0) {
             bottomNavigationView.getMenu().findItem(idMenuActual).setChecked(true);
             bottomNavigationView.post(() -> {
@@ -105,7 +130,10 @@ public class BaseActivity extends AppCompatActivity {
         View ivEscudo = findViewById(R.id.ivEscudo);
         View ivConfig = findViewById(R.id.ivConfigTiempo);
         if (ivEscudo != null) iniciarPulsoToolbar(ivEscudo, 3800, 0);
-        if (ivConfig != null) iniciarPulsoToolbar(ivConfig, 3800, 700);
+        if (ivConfig != null) {
+            iniciarPulsoToolbar(ivConfig, 3800, 700);
+            ivConfig.setOnClickListener(v -> startActivity(new Intent(this, configuracionesAppActivity.class)));
+        }
     }
 
     private void iniciarPulsoToolbar(View vista, long duracion, long delay) {

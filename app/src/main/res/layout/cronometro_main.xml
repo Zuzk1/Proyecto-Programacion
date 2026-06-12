@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_fondo_principal"
+    android:background="?attr/themeFondoPrincipal"
     android:clipChildren="false"
     android:clipToPadding="false"
     tools:context=".CronometroActivity">
@@ -37,7 +37,7 @@
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/color_fondo_principal"
+        android:background="?attr/themeFondoPrincipal"
         app:elevation="0dp"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -52,7 +52,7 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginStart="16dp"
                 android:text="Enfoque"
-                android:textColor="@color/white"
+                android:textColor="?attr/themeTextoPrimario"
                 android:textSize="22sp"
                 android:fontFamily="@font/poppins_semibold"
                 android:textStyle="bold" />
@@ -78,7 +78,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:src="@drawable/ic_configtiempo"
-                    app:tint="@color/white" />
+                    app:tint="?attr/themeTextoPrimario" />
             </LinearLayout>
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
@@ -89,7 +89,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="SESIÓN DE ENFOQUE"
-        android:textColor="@color/white"
+        android:textColor="?attr/themeTextoPrimario"
         android:textSize="20sp"
         android:textStyle="bold"
         android:fontFamily="@font/poppins_semibold"
@@ -104,7 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Enfocado en: Estudiar para el Examen"
-        android:textColor="@color/color_gris_texto_secundario"
+        android:textColor="?attr/themeTextoSecundario"
         android:textSize="14sp"
         android:fontFamily="@font/poppins_regular"
         app:layout_constraintEnd_toEndOf="parent"
@@ -118,12 +118,12 @@
         android:layout_marginTop="24dp"
         android:max="100"
         android:progress="75"
-        app:indicatorColor="@color/white"
+        app:indicatorColor="?attr/themeTextoPrimario"
         app:indicatorSize="220dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvSubtitulo"
-        app:trackColor="@color/color_fondo_track_progreso"
+        app:trackColor="?attr/themeFondoTarjetaSecundaria"
         app:trackThickness="14dp"
         app:trackCornerRadius="7dp" />
 
@@ -132,7 +132,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="25:00"
-        android:textColor="@color/white"
+        android:textColor="?attr/themeTextoPrimario"
         android:textSize="48sp"
         android:textStyle="bold"
         android:fontFamily="@font/poppins_bold"
@@ -163,7 +163,7 @@
             android:background="@drawable/ciclo_activo"
             android:gravity="center"
             android:text="1"
-            android:textColor="@color/black"
+            android:textColor="?attr/themeFondoPrincipal"
             android:textSize="14sp"
             android:textStyle="bold" />
 
@@ -175,7 +175,7 @@
             android:background="@drawable/ciclo_inactivo"
             android:gravity="center"
             android:text="2"
-            android:textColor="@color/color_gris_texto_terciario"
+            android:textColor="?attr/themeTextoTerciario"
             android:textSize="14sp" />
 
         <TextView
@@ -186,7 +186,7 @@
             android:background="@drawable/ciclo_inactivo"
             android:gravity="center"
             android:text="3"
-            android:textColor="@color/color_gris_texto_terciario"
+            android:textColor="?attr/themeTextoTerciario"
             android:textSize="14sp" />
 
         <TextView
@@ -196,7 +196,7 @@
             android:background="@drawable/ciclo_inactivo"
             android:gravity="center"
             android:text="4"
-            android:textColor="@color/color_gris_texto_terciario"
+            android:textColor="?attr/themeTextoTerciario"
             android:textSize="14sp" />
     </LinearLayout>
 
@@ -229,8 +229,8 @@
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_media_play"
             android:contentDescription="Pausar"
-            app:backgroundTint="@color/white"
-            app:tint="@color/black"
+            app:backgroundTint="?attr/themeTextoPrimario"
+            app:tint="?attr/themeFondoPrincipal"
             app:elevation="4dp"
             app:fabSize="normal" />
     </LinearLayout>
@@ -251,13 +251,49 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/color_fondo_barra_navegacion"
+        android:background="?attr/themeFondoBarraNavegacion"
         app:itemIconSize="28dp"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+        app:itemIconTint="?attr/themeTextoPrimario"
+        app:itemTextColor="?attr/themeTextoPrimario"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/navegador_menu" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/splashOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/themeFondoPrincipal"
+        android:elevation="100dp"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/ivSplashIcono"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@mipmap/ic_launcher_round"
+            app:layout_constraintBottom_toTopOf="@id/tvSplashTitulo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:layout_marginBottom="28dp" />
+
+        <TextView
+            android:id="@+id/tvSplashTitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Miau Focus"
+            android:textColor="?attr/themeTextoPrimario"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.05"
+            app:layout_constraintTop_toBottomOf="@id/ivSplashIcono"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

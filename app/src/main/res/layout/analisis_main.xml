@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_fondo_principal"
+    android:background="?attr/themeFondoPrincipal"
     android:clipChildren="false"
     android:clipToPadding="false"
     tools:context=".analisisActivity">
@@ -15,7 +15,7 @@
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/color_fondo_principal"
+        android:background="?attr/themeFondoPrincipal"
         app:elevation="0dp"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -23,7 +23,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/color_fondo_principal">
+            android:background="?attr/themeFondoPrincipal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginStart="16dp"
                 android:text="Estadisticas"
-                android:textColor="@color/white"
+                android:textColor="?attr/themeTextoPrimario"
                 android:textSize="22sp"
                 android:fontFamily="@font/poppins_semibold"
                 android:textStyle="bold" />
@@ -57,7 +57,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:src="@drawable/ic_configtiempo"
-                    app:tint="@color/white" />
+                    app:tint="?attr/themeTextoPrimario" />
             </LinearLayout>
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/poppins_medium"
-            android:textColor="@color/color_gris_texto_secundario"
+            android:textColor="?attr/themeTextoSecundario"
             android:textSize="15sp"
             tools:text="Tiempo de Enfoque Total: 18 hrs" />
 
@@ -91,7 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/poppins_medium"
-            android:textColor="@color/color_gris_texto_secundario"
+            android:textColor="?attr/themeTextoSecundario"
             android:textSize="15sp"
             tools:text="Pomodoros Completados: 36" />
 
@@ -101,7 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/poppins_medium"
-            android:textColor="@color/color_gris_texto_secundario"
+            android:textColor="?attr/themeTextoSecundario"
             android:textSize="15sp"
             tools:text="Racha Actual: 7 Días" />
 
@@ -110,7 +110,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
-            android:textColor="@color/color_gris_texto_secundario"
+            android:textColor="?attr/themeTextoSecundario"
             android:textSize="15sp"
             tools:text="Tasa de Fallos: 12% · 3 bloques abandonados" />
 
@@ -143,7 +143,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/poppins_semibold"
-            android:textColor="@color/white"
+            android:textColor="?attr/themeTextoPrimario"
             android:textSize="18sp"
             tools:text="350 Puntos" />
 
@@ -153,11 +153,11 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_semibold"
             android:text="Tienda de Temas"
-            android:textColor="@color/black"
+            android:textColor="?attr/themeSobreAcento"
             android:textSize="13sp"
-            app:backgroundTint="@color/white"
+            app:backgroundTint="?attr/themeAcento"
             app:cornerRadius="24dp"
-            app:rippleColor="@color/color_gris_ripple" />
+            app:rippleColor="?attr/themeRipple" />
     </LinearLayout>
 
     <TextView
@@ -169,7 +169,7 @@
         android:gravity="center"
         android:fontFamily="@font/poppins_semibold"
         android:text="Pomodoros Completados por Día"
-        android:textColor="@color/white"
+        android:textColor="?attr/themeTextoPrimario"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -206,7 +206,7 @@
         android:gravity="center"
         android:fontFamily="@font/poppins_semibold"
         android:text="Actividades Recientes"
-        android:textColor="@color/white"
+        android:textColor="?attr/themeTextoPrimario"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -232,7 +232,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_regular"
-            android:textColor="@color/color_gris_texto_secundario"
+            android:textColor="?attr/themeTextoSecundario"
             android:textSize="13sp"
             android:text="Aún no hay actividades completadas" />
     </LinearLayout>
@@ -241,10 +241,10 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/color_fondo_barra_navegacion"
+        android:background="?attr/themeFondoBarraNavegacion"
         app:itemIconSize="28dp"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+        app:itemIconTint="?attr/themeTextoPrimario"
+        app:itemTextColor="?attr/themeTextoPrimario"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

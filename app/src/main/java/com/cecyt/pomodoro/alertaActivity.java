@@ -3,6 +3,7 @@ package com.cecyt.pomodoro;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -18,20 +19,24 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 public class alertaActivity extends AppCompatActivity {
 
+    public static volatile boolean estaActiva = false;
+
     private CountDownTimer contador;
     private Button btnSilenciar;
     private View viewGlowTop;
     private CircularProgressIndicator pbProgresoSilenciar;
     private Ringtone ringtone;
     private boolean isBotonPresionado = false;
+    private boolean esInfraccion = false;
 
-    // Variables para controlar las animaciones de la barra
     private ObjectAnimator animacionProgresoFadeIn;
     private ObjectAnimator animacionProgresoFadeOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        new GestorTemas(this).aplicarTema(this);
         super.onCreate(savedInstanceState);
+        estaActiva = true;
         this.setFinishOnTouchOutside(false);
         setContentView(R.layout.alerta_main);
 
@@ -42,8 +47,11 @@ public class alertaActivity extends AppCompatActivity {
         pbProgresoSilenciar.setAlpha(0f);
         pbProgresoSilenciar.setVisibility(View.INVISIBLE);
 
-        if (getIntent().getBooleanExtra(GestorAlertas.EXTRA_ES_INFRACCION, false)) {
-            new GestorEstadisticas(this).registrarFallo();
+        esInfraccion = getIntent().getBooleanExtra(GestorAlertas.EXTRA_ES_INFRACCION, false);
+        if (esInfraccion && CronometroActivity.estaCorriendoGlobal) {
+            Intent intentPausar = new Intent(this, CronometroService.class);
+            intentPausar.setAction(CronometroService.ACCION_PAUSAR);
+            ContextCompat.startForegroundService(this, intentPausar);
         }
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
@@ -216,6 +224,14 @@ public class alertaActivity extends AppCompatActivity {
             public void onFinish() {
                 pbProgresoSilenciar.setProgress(5000);
                 detenerAlarma();
+                if (esInfraccion) {
+                    GestorAlertas.limpiarInfraccionPendiente(alertaActivity.this);
+                    if (CronometroActivity.estaCorriendoGlobal) {
+                        Intent intentReanudar = new Intent(alertaActivity.this, CronometroService.class);
+                        intentReanudar.setAction(CronometroService.ACCION_REANUDAR);
+                        ContextCompat.startForegroundService(alertaActivity.this, intentReanudar);
+                    }
+                }
                 finish();
             }
         }.start();
@@ -224,6 +240,7 @@ public class alertaActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        estaActiva = false;
         if (contador != null) {
             contador.cancel();
             contador = null;
