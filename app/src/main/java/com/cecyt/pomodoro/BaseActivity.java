@@ -14,6 +14,7 @@ public class BaseActivity extends AppCompatActivity {
 
     protected BottomNavigationView bottomNavigationView;
     private ObjectAnimator animacionMenuActual;
+    private View vistaIconoMenuActual;
     private int idMenuActual = 0;
 
     protected void configurarNavegacion(int idItemSeleccionado) {
@@ -47,9 +48,14 @@ public class BaseActivity extends AppCompatActivity {
             }
 
             if (intent != null) {
-                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
+                final Intent intentDestino = intent;
+                detenerAnimacionIconoMenuSuave();
+
+                bottomNavigationView.postDelayed(() -> {
+                    intentDestino.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(intentDestino);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                }, 180);
             }
 
             return false;
@@ -102,17 +108,43 @@ public class BaseActivity extends AppCompatActivity {
     }
 //ola
     private void animarIconoMenu(ViewGroup menuView, int indiceSeleccionado) {
-        if (animacionMenuActual != null) animacionMenuActual.cancel();
-        for (int i = 0; i < menuView.getChildCount(); i++) {
-            View child = menuView.getChildAt(i);
-            if (child != null) child.setTranslationY(0f);
-        }
+        detenerAnimacionIconoMenuSuave();
+
         View vistaIcono = menuView.getChildAt(indiceSeleccionado);
         if (vistaIcono != null) {
-            animacionMenuActual = ObjectAnimator.ofFloat(vistaIcono, "translationY", 0f, -15f, 0f);
-            animacionMenuActual.setDuration(2500);
-            animacionMenuActual.setRepeatCount(ObjectAnimator.INFINITE);
-            animacionMenuActual.start();
+            iniciarAnimacionIconoMenu(vistaIcono);
+        }
+    }
+
+    private void iniciarAnimacionIconoMenu(View vistaIcono) {
+        vistaIconoMenuActual = vistaIcono;
+        animacionMenuActual = ObjectAnimator.ofFloat(vistaIcono, "translationY", 0f, -15f, 0f);
+        animacionMenuActual.setDuration(2500);
+        animacionMenuActual.setRepeatCount(ObjectAnimator.INFINITE);
+        animacionMenuActual.start();
+    }
+
+    private void detenerAnimacionIconoMenuSuave() {
+        if (animacionMenuActual != null) {
+            animacionMenuActual.cancel();
+            animacionMenuActual = null;
+        }
+
+        if (vistaIconoMenuActual != null) {
+            ObjectAnimator detener = ObjectAnimator.ofFloat(vistaIconoMenuActual, "translationY", vistaIconoMenuActual.getTranslationY(), 0f);
+            detener.setDuration(300);
+            detener.setInterpolator(new AccelerateDecelerateInterpolator());
+            detener.start();
+        }
+    }
+
+    protected void pausarAnimacionMenuSuave() {
+        detenerAnimacionIconoMenuSuave();
+    }
+
+    protected void reanudarAnimacionMenuSuave() {
+        if (vistaIconoMenuActual != null) {
+            iniciarAnimacionIconoMenu(vistaIconoMenuActual);
         }
     }
 }

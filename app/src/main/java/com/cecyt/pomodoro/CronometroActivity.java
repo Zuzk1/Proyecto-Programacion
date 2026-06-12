@@ -1,14 +1,19 @@
 package com.cecyt.pomodoro;
 
+import android.Manifest;
 import android.animation.AnimatorSet;
+import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -19,6 +24,9 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.TextView;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
 import androidx.core.splashscreen.SplashScreen;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -28,7 +36,6 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 public class CronometroActivity extends BaseActivity {
 
     private boolean mantenerSplashScreen = true;
-    private boolean alertaYaLanzada = false;
     private CountDownTimer temporizador;
 
     private final long TIEMPO_ENFOQUE = 1500000;
@@ -42,6 +49,7 @@ public class CronometroActivity extends BaseActivity {
 
     private TextView textoTiempo;
     private TextView tvTitulo;
+    private TextView tvSubtitulo;
     private CircularProgressIndicator barraProgreso;
     private FloatingActionButton botonPausar;
     private FloatingActionButton botonRenunciar;
@@ -61,25 +69,56 @@ public class CronometroActivity extends BaseActivity {
     private long startTimeBase;
     private long tiempoFinEstimado;
 
+    private ValueAnimator animacionNavegacion;
+
+    private ActivityResultLauncher<String> solicitarPermisoNotificaciones;
+
     @Override
     protected void onPause() {
         super.onPause();
-        if (estaCorriendo && !alertaYaLanzada) {
-            alertaYaLanzada = true;
-            startActivity(new android.content.Intent(this, alertaActivity.class));
+        if (estaCorriendo) {
+            long tiempoRestanteReal = tiempoFinEstimado - SystemClock.elapsedRealtime();
+            if (tiempoRestanteReal < 0) tiempoRestanteReal = 0;
+
+            Intent intentServicio = new Intent(this, CronometroService.class);
+            intentServicio.setAction(CronometroService.ACCION_INICIAR);
+            intentServicio.putExtra(CronometroService.EXTRA_TIEMPO_RESTANTE, tiempoRestanteReal);
+            intentServicio.putExtra(CronometroService.EXTRA_ES_DESCANSO, esDescanso);
+            ContextCompat.startForegroundService(this, intentServicio);
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        alertaYaLanzada = false;
+        detenerServicioCronometro();
+        actualizarTareaActiva();
+    }
+
+    private void detenerServicioCronometro() {
+        Intent intentServicio = new Intent(this, CronometroService.class);
+        intentServicio.setAction(CronometroService.ACCION_DETENER);
+        startService(intentServicio);
+    }
+
+    private void actualizarTareaActiva() {
+        SharedPreferences preferencias = getSharedPreferences("PreferenciasCajaFacil", Context.MODE_PRIVATE);
+        String tareaActiva = preferencias.getString("tarea_activa_actual", "Ninguna");
+        if (tvSubtitulo != null) {
+            tvSubtitulo.setText("Enfocado en: " + tareaActiva);
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         handlerCiclos.removeCallbacks(runnableCiclos);
+        if (animacionNavegacion != null) {
+            animacionNavegacion.cancel();
+        }
+        if (!estaCorriendo) {
+            detenerServicioCronometro();
+        }
     }
 
     @Override
@@ -88,11 +127,21 @@ public class CronometroActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cronometro_main);
 
+        solicitarPermisoNotificaciones = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(), concedido -> { });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                && ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                        != PackageManager.PERMISSION_GRANTED) {
+            solicitarPermisoNotificaciones.launch(Manifest.permission.POST_NOTIFICATIONS);
+        }
+
         splashScreen.setKeepOnScreenCondition(() -> mantenerSplashScreen);
         new Handler(Looper.getMainLooper()).postDelayed(() -> mantenerSplashScreen = false, 850);
 
         textoTiempo = findViewById(R.id.tvTiempo);
         tvTitulo = findViewById(R.id.tvTitulo);
+        tvSubtitulo = findViewById(R.id.tvSubtitulo);
         barraProgreso = findViewById(R.id.pbCronometro);
         botonPausar = findViewById(R.id.btnPausar);
         botonRenunciar = findViewById(R.id.btnRenunciar);
@@ -126,6 +175,44 @@ public class CronometroActivity extends BaseActivity {
         for (int i = 0; i < bottomNavigationView.getMenu().size(); i++) {
             bottomNavigationView.getMenu().getItem(i).setEnabled(habilitar);
         }
+        animarColoresNavegacion(habilitar);
+
+        if (habilitar) {
+            reanudarAnimacionMenuSuave();
+        } else {
+            pausarAnimacionMenuSuave();
+        }
+    }
+
+    private void animarColoresNavegacion(boolean habilitar) {
+        if (animacionNavegacion != null) {
+            animacionNavegacion.cancel();
+        }
+
+        int colorIconoNormal = ContextCompat.getColor(this, R.color.white);
+        int colorIconoApagado = ContextCompat.getColor(this, R.color.color_gris_icono_apagado);
+        int colorIndicadorNormal = ContextCompat.getColor(this, R.color.color_azul_contenedor_secundario);
+        int colorIndicadorApagado = ContextCompat.getColor(this, R.color.color_gris_navegacion_apagada);
+
+        int colorIconoInicio = habilitar ? colorIconoApagado : colorIconoNormal;
+        int colorIconoFin = habilitar ? colorIconoNormal : colorIconoApagado;
+        int colorIndicadorInicio = habilitar ? colorIndicadorApagado : colorIndicadorNormal;
+        int colorIndicadorFin = habilitar ? colorIndicadorNormal : colorIndicadorApagado;
+
+        ArgbEvaluator evaluador = new ArgbEvaluator();
+
+        animacionNavegacion = ValueAnimator.ofFloat(0f, 1f);
+        animacionNavegacion.setDuration(500);
+        animacionNavegacion.addUpdateListener(animacion -> {
+            float fraccion = (float) animacion.getAnimatedValue();
+            int colorIcono = (int) evaluador.evaluate(fraccion, colorIconoInicio, colorIconoFin);
+            int colorIndicador = (int) evaluador.evaluate(fraccion, colorIndicadorInicio, colorIndicadorFin);
+
+            bottomNavigationView.setItemIconTintList(ColorStateList.valueOf(colorIcono));
+            bottomNavigationView.setItemTextColor(ColorStateList.valueOf(colorIcono));
+            bottomNavigationView.setItemActiveIndicatorColor(ColorStateList.valueOf(colorIndicador));
+        });
+        animacionNavegacion.start();
     }
 
     private void animarCirculos() {
@@ -321,6 +408,13 @@ public class CronometroActivity extends BaseActivity {
         gatoAnimado.pauseAnimation();
 
         if (!esDescanso) {
+            GestorEstadisticas gestor = new GestorEstadisticas(this);
+            gestor.registrarPomodoroExitoso((int) (TIEMPO_ENFOQUE / 60000), 10);
+
+            SharedPreferences preferencias = getSharedPreferences("PreferenciasCajaFacil", Context.MODE_PRIVATE);
+            String tareaActiva = preferencias.getString("tarea_activa_actual", "Ninguna");
+            gestor.registrarActividadCompletada(tareaActiva);
+
             actualizarIndicadorVisual(cicloActual);
             cicloActual++;
 
@@ -334,12 +428,12 @@ public class CronometroActivity extends BaseActivity {
                 tvTitulo.setText("DESCANSO CORTO");
             }
             esDescanso = true;
-            barraProgreso.setIndicatorColor(Color.parseColor("#4CAF50"));
+            barraProgreso.setIndicatorColor(ContextCompat.getColor(this, R.color.color_verde_exito));
         } else {
             tiempoRestante = TIEMPO_ENFOQUE;
             tvTitulo.setText("SESIÓN DE ENFOQUE");
             esDescanso = false;
-            barraProgreso.setIndicatorColor(Color.parseColor("#FFFFFF"));
+            barraProgreso.setIndicatorColor(ContextCompat.getColor(this, R.color.white));
             configurarIndicadorActual(cicloActual);
         }
 
@@ -350,16 +444,16 @@ public class CronometroActivity extends BaseActivity {
     private void actualizarIndicadorVisual(int ciclo) {
         TextView tvObjetivo = obtenerTextViewPorCiclo(ciclo);
         if (tvObjetivo != null) {
-            tvObjetivo.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#555555")));
-            tvObjetivo.setTextColor(Color.parseColor("#A0A0A0"));
+            tvObjetivo.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.color_gris_indicador_apagado)));
+            tvObjetivo.setTextColor(ContextCompat.getColor(this, R.color.color_gris_texto_secundario));
         }
     }
 
     private void configurarIndicadorActual(int ciclo) {
         TextView tvObjetivo = obtenerTextViewPorCiclo(ciclo);
         if (tvObjetivo != null) {
-            tvObjetivo.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FFFFFF")));
-            tvObjetivo.setTextColor(Color.parseColor("#000000"));
+            tvObjetivo.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.white)));
+            tvObjetivo.setTextColor(ContextCompat.getColor(this, R.color.black));
         }
     }
 
@@ -374,8 +468,8 @@ public class CronometroActivity extends BaseActivity {
     }
 
     private void restaurarIndicadoresGlobales() {
-        int colorOscuro = Color.parseColor("#333333");
-        int colorBlanco = Color.parseColor("#FFFFFF");
+        int colorOscuro = ContextCompat.getColor(this, R.color.color_gris_indicador_restaurado);
+        int colorBlanco = ContextCompat.getColor(this, R.color.white);
         tvCiclo1.setBackgroundTintList(ColorStateList.valueOf(colorOscuro));
         tvCiclo1.setTextColor(colorBlanco);
         tvCiclo2.setBackgroundTintList(ColorStateList.valueOf(colorOscuro));
@@ -402,6 +496,11 @@ public class CronometroActivity extends BaseActivity {
         if (temporizador != null) {
             temporizador.cancel();
         }
+
+        if (!esDescanso) {
+            new GestorEstadisticas(this).registrarFallo();
+        }
+
         tiempoRestante = TIEMPO_ENFOQUE;
         estaCorriendo = false;
         esDescanso = false;
@@ -412,7 +511,7 @@ public class CronometroActivity extends BaseActivity {
         gatoAnimado.setProgress(0);
 
         tvTitulo.setText("SESIÓN DE ENFOQUE");
-        barraProgreso.setIndicatorColor(Color.parseColor("#FFFFFF"));
+        barraProgreso.setIndicatorColor(ContextCompat.getColor(this, R.color.white));
         barraProgreso.setMax((int) TIEMPO_ENFOQUE);
         restaurarIndicadoresGlobales();
         configurarIndicadorActual(cicloActual);

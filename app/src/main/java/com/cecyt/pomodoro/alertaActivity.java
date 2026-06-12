@@ -3,7 +3,6 @@ package com.cecyt.pomodoro;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
-import android.graphics.Color;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -13,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 public class alertaActivity extends AppCompatActivity {
@@ -87,7 +87,7 @@ public class alertaActivity extends AppCompatActivity {
     }
 
     private void transicionTexto(String nuevoTexto, Runnable accionAlTerminarFondo) {
-        ObjectAnimator fadeOut = ObjectAnimator.ofArgb(btnSilenciar, "textColor", Color.WHITE, Color.TRANSPARENT);
+        ObjectAnimator fadeOut = ObjectAnimator.ofArgb(btnSilenciar, "textColor", ContextCompat.getColor(this, R.color.white), ContextCompat.getColor(this, R.color.color_transparente));
         fadeOut.setDuration(120);
         fadeOut.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -96,7 +96,7 @@ public class alertaActivity extends AppCompatActivity {
                 if (accionAlTerminarFondo != null) {
                     accionAlTerminarFondo.run();
                 }
-                ObjectAnimator fadeIn = ObjectAnimator.ofArgb(btnSilenciar, "textColor", Color.TRANSPARENT, Color.WHITE);
+                ObjectAnimator fadeIn = ObjectAnimator.ofArgb(btnSilenciar, "textColor", ContextCompat.getColor(alertaActivity.this, R.color.color_transparente), ContextCompat.getColor(alertaActivity.this, R.color.white));
                 fadeIn.setDuration(120);
                 fadeIn.start();
             }

@@ -1,7 +1,6 @@
 package com.cecyt.pomodoro;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -12,6 +11,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
+
+import java.util.ArrayList;
 
 public class analisisActivity extends BaseActivity {
 
@@ -26,6 +29,7 @@ public class analisisActivity extends BaseActivity {
 
             gestor = new GestorEstadisticas(this);
             cargarDatosReales();
+            cargarActividadesRecientes();
 
             int[] datosPomodorosSemana = gestor.getDatosSemana();
             dibujarGraficaDeBarras(datosPomodorosSemana);
@@ -64,8 +68,8 @@ public class analisisActivity extends BaseActivity {
         int inicioRojoRacha = textoRacha.indexOf("(");
 
         if (inicioRojoRacha != -1) {
-            spannableRacha.setSpan(new ForegroundColorSpan(Color.parseColor("#A0A0A0")), 0, inicioRojoRacha, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannableRacha.setSpan(new ForegroundColorSpan(Color.parseColor("#E57373")), inicioRojoRacha, textoRacha.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableRacha.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.color_gris_texto_secundario)), 0, inicioRojoRacha, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableRacha.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.color_rojo_alerta_texto)), inicioRojoRacha, textoRacha.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         tvRacha.setText(spannableRacha);
 
@@ -82,10 +86,26 @@ public class analisisActivity extends BaseActivity {
         int inicioRojoFallos = textoFallos.indexOf("·");
 
         if (inicioRojoFallos != -1) {
-            spannableFallos.setSpan(new ForegroundColorSpan(Color.parseColor("#A0A0A0")), 0, inicioRojoFallos, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannableFallos.setSpan(new ForegroundColorSpan(Color.parseColor("#E57373")), inicioRojoFallos, textoFallos.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableFallos.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.color_gris_texto_secundario)), 0, inicioRojoFallos, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableFallos.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.color_rojo_alerta_texto)), inicioRojoFallos, textoFallos.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         tvFallos.setText(spannableFallos);
+    }
+
+    private void cargarActividadesRecientes() {
+        ArrayList<String> actividades = gestor.getActividadesRecientes(5);
+        TextView tvActividades = findViewById(R.id.tvActividadesRecientes);
+
+        if (actividades.isEmpty()) {
+            tvActividades.setText("Aún no hay actividades completadas");
+            return;
+        }
+
+        StringBuilder textoActividades = new StringBuilder();
+        for (String actividad : actividades) {
+            textoActividades.append("• ").append(actividad).append("\n");
+        }
+        tvActividades.setText(textoActividades.toString().trim());
     }
 
     private void dibujarGraficaDeBarras(int[] datos) {
@@ -132,7 +152,7 @@ public class analisisActivity extends BaseActivity {
 
             TextView tvDia = new TextView(this);
             tvDia.setText(dias[i]);
-            tvDia.setTextColor(Color.parseColor("#A0A0A0"));
+            tvDia.setTextColor(ContextCompat.getColor(this, R.color.color_gris_texto_secundario));
             tvDia.setTextSize(12f);
             tvDia.setGravity(Gravity.CENTER);
 

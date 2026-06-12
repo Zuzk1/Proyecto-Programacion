@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1F1F24">
+    android:background="@color/color_fondo_principal">
 
     <View
         android:id="@+id/circleTopRight"
@@ -37,7 +37,7 @@
         android:gravity="center"
         android:letterSpacing="0.08"
         android:text="Miau Focus"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,7 +55,7 @@
         android:paddingVertical="4dp"
         android:fontFamily="@font/poppins_medium"
         android:text="POMODORO"
-        android:textColor="#64B5F6"
+        android:textColor="@color/color_azul_claro"
         android:textSize="13sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -90,12 +90,12 @@
         android:layout_marginHorizontal="28dp"
         android:layout_marginBottom="32dp"
         android:text="COMENZAR"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
         android:fontFamily="@font/poppins_semibold"
         android:letterSpacing="0.12"
-        app:backgroundTint="#2196F3"
+        app:backgroundTint="@color/color_azul_principal"
         app:cornerRadius="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
