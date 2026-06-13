@@ -22,6 +22,10 @@ public class GestorAlertas {
     public static final String EXTRA_ES_INFRACCION = "extra_es_infraccion";
     private static final String PREFS_NOMBRE = "PrefsAlertas";
     private static final String CLAVE_INFRACCION_PENDIENTE = "infraccion_pendiente";
+    private static final String CLAVE_TIEMPO_RESTANTE_GUARDADO = "tiempo_restante_guardado";
+    private static final String CLAVE_ES_DESCANSO_GUARDADO = "es_descanso_guardado";
+    private static final String CLAVE_CICLO_ACTUAL_GUARDADO = "ciclo_actual_guardado";
+    private static final String CLAVE_TITULO_GUARDADO = "titulo_guardado";
 
     public static void crearCanales(Context contexto) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
@@ -87,6 +91,44 @@ public class GestorAlertas {
     public static boolean hayInfraccionPendiente(Context contexto) {
         return contexto.getSharedPreferences(PREFS_NOMBRE, Context.MODE_PRIVATE)
                 .getBoolean(CLAVE_INFRACCION_PENDIENTE, false);
+    }
+
+    public static void guardarEstadoCronometro(Context contexto, long tiempoRestante, boolean esDescanso, int cicloActual, String titulo) {
+        contexto.getSharedPreferences(PREFS_NOMBRE, Context.MODE_PRIVATE).edit()
+                .putLong(CLAVE_TIEMPO_RESTANTE_GUARDADO, tiempoRestante)
+                .putBoolean(CLAVE_ES_DESCANSO_GUARDADO, esDescanso)
+                .putInt(CLAVE_CICLO_ACTUAL_GUARDADO, cicloActual)
+                .putString(CLAVE_TITULO_GUARDADO, titulo)
+                .apply();
+    }
+
+    public static long getTiempoRestanteGuardado(Context contexto) {
+        return contexto.getSharedPreferences(PREFS_NOMBRE, Context.MODE_PRIVATE)
+                .getLong(CLAVE_TIEMPO_RESTANTE_GUARDADO, -1);
+    }
+
+    public static boolean getEsDescansoGuardado(Context contexto) {
+        return contexto.getSharedPreferences(PREFS_NOMBRE, Context.MODE_PRIVATE)
+                .getBoolean(CLAVE_ES_DESCANSO_GUARDADO, false);
+    }
+
+    public static int getCicloActualGuardado(Context contexto) {
+        return contexto.getSharedPreferences(PREFS_NOMBRE, Context.MODE_PRIVATE)
+                .getInt(CLAVE_CICLO_ACTUAL_GUARDADO, 1);
+    }
+
+    public static String getTituloGuardado(Context contexto) {
+        return contexto.getSharedPreferences(PREFS_NOMBRE, Context.MODE_PRIVATE)
+                .getString(CLAVE_TITULO_GUARDADO, "SESIÓN DE ENFOQUE");
+    }
+
+    public static void limpiarEstadoCronometroGuardado(Context contexto) {
+        contexto.getSharedPreferences(PREFS_NOMBRE, Context.MODE_PRIVATE).edit()
+                .remove(CLAVE_TIEMPO_RESTANTE_GUARDADO)
+                .remove(CLAVE_ES_DESCANSO_GUARDADO)
+                .remove(CLAVE_CICLO_ACTUAL_GUARDADO)
+                .remove(CLAVE_TITULO_GUARDADO)
+                .apply();
     }
 
     public static void mostrarAlertaPomodoro(Context contexto, String titulo, String mensaje) {

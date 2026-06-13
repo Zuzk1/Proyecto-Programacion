@@ -18,7 +18,7 @@ public class OnboardingAdapterActivity extends RecyclerView.Adapter<OnboardingAd
 
     private final String[] descripciones = {
             "Tu compañero felino te ayudará a mantenerte enfocado con la técnica Pomodoro. ¡Desliza para descubrir cómo!",
-            "Si sales de la app durante una sesión, la alarma se activa y pierdes puntos. Mantente enfocado.",
+            "Si sales de la app durante una sesión, el cronómetro se pausa y, si te tardas en volver, pierdes puntos. Mantente enfocado.",
             "Completa ciclos, gana puntos y desbloquea temas. Cada sesión completada fortalece tu racha."
     };
 

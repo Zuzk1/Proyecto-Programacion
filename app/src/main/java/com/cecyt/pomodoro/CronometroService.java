@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
-import android.provider.Settings;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
@@ -54,6 +53,12 @@ public class CronometroService extends Service {
             detenerServicio();
             return START_NOT_STICKY;
         }
+
+        // Toda accion que llega aqui fue lanzada con startForegroundService(),
+        // asi que el contrato exige llamar a startForeground() de inmediato,
+        // sin importar si la accion luego decide detener el servicio.
+        startForeground(ID_NOTIFICACION_PROGRESO, construirNotificacionProgreso(finEstimadoActual, esDescansoActual));
+
         if (ACCION_PAUSAR.equals(accion)) {
             pausarSeguimiento();
             return START_STICKY;
@@ -116,6 +121,7 @@ public class CronometroService extends Service {
 
     private void reanudarSeguimiento() {
         if (tiempoRestantePausado < 0) {
+            stopForeground(true);
             stopSelf();
             return;
         }
@@ -146,8 +152,8 @@ public class CronometroService extends Service {
     }
 
     private void notificarFinalizacion(boolean esDescanso) {
-        Log.d(ETIQUETA_DEPURACION, "Servicio: notificarFinalizacion, puedeDibujarSobreOtrasApps=" + Settings.canDrawOverlays(this)
-                + " permisoNotificaciones=" + (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED));
+        Log.d(ETIQUETA_DEPURACION, "Servicio: notificarFinalizacion, permisoNotificaciones="
+                + (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED));
         Intent intentAlerta = new Intent(this, alertaActivity.class);
         intentAlerta.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_USER_ACTION);
         PendingIntent intentoPendienteAlerta = PendingIntent.getActivity(
@@ -168,12 +174,6 @@ public class CronometroService extends Service {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
                 == PackageManager.PERMISSION_GRANTED) {
             NotificationManagerCompat.from(this).notify(GestorAlertas.ID_NOTIFICACION_ALARMA, notificacionAlarma);
-        }
-
-        if (Settings.canDrawOverlays(this)) {
-            Intent intentAlertaDirecta = new Intent(this, alertaActivity.class);
-            intentAlertaDirecta.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intentAlertaDirecta);
         }
     }
 

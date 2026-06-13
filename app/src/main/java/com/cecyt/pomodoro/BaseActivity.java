@@ -2,12 +2,16 @@ package com.cecyt.pomodoro;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -21,6 +25,9 @@ public class BaseActivity extends AppCompatActivity {
     private int idMenuActual = 0;
     private boolean animacionMenuPausada = false;
     private GestorTemas.Tema temaAlCrear;
+    protected boolean redirigidoAAlerta = false;
+    private ImageView ivEscudoToolbar;
+    private ImageView ivConfigToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +92,8 @@ public class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if (!alertaActivity.estaActiva && GestorAlertas.hayInfraccionPendiente(this)) {
-            Intent intentAlerta = new Intent(this, alertaActivity.class);
-            intentAlerta.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intentAlerta.putExtra(GestorAlertas.EXTRA_ES_INFRACCION, true);
-            startActivity(intentAlerta);
+        redirigidoAAlerta = redirigirAAlertaSiCorresponde();
+        if (redirigidoAAlerta) {
             return;
         }
 
@@ -106,6 +110,32 @@ public class BaseActivity extends AppCompatActivity {
                 if (indice != -1) animarIconoMenu(menuView, indice);
             });
         }
+
+        actualizarEstadoIconosToolbar();
+    }
+
+    /**
+     * Punto unico de entrada para todas las pantallas: si hay una alerta de
+     * distraccion activa o pendiente, redirige a ella en vez de mostrar
+     * la pantalla normal. Evita que cada Activity duplique esta logica.
+     */
+    protected boolean redirigirAAlertaSiCorresponde() {
+        if (alertaActivity.estaActiva) {
+            Intent intentAlerta = new Intent(this, alertaActivity.class);
+            intentAlerta.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(intentAlerta);
+            return true;
+        }
+
+        if (GestorAlertas.hayInfraccionPendiente(this)) {
+            Intent intentAlerta = new Intent(this, alertaActivity.class);
+            intentAlerta.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intentAlerta.putExtra(GestorAlertas.EXTRA_ES_INFRACCION, true);
+            startActivity(intentAlerta);
+            return true;
+        }
+
+        return false;
     }
 
     private void aplicarInsetsBarrasSistema() {
@@ -127,18 +157,22 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void animarIconosToolbar() {
-        View ivEscudo = findViewById(R.id.ivEscudo);
-        View ivConfig = findViewById(R.id.ivConfigTiempo);
-        if (ivEscudo != null) iniciarPulsoToolbar(ivEscudo, 3800, 0);
-        if (ivConfig != null) {
-            iniciarPulsoToolbar(ivConfig, 3800, 700);
-            ivConfig.setOnClickListener(v -> startActivity(new Intent(this, configuracionesAppActivity.class)));
+        ivEscudoToolbar = findViewById(R.id.ivEscudo);
+        ivConfigToolbar = findViewById(R.id.ivConfigTiempo);
+        if (ivEscudoToolbar != null) {
+            iniciarPulsoToolbar(ivEscudoToolbar, 3800, 0);
+            ivEscudoToolbar.setOnClickListener(v -> startActivity(new Intent(this, ajustesGeneralesActivity.class)));
         }
+        if (ivConfigToolbar != null) {
+            iniciarPulsoToolbar(ivConfigToolbar, 3800, 700);
+            ivConfigToolbar.setOnClickListener(v -> startActivity(new Intent(this, configuracionesAppActivity.class)));
+        }
+        actualizarEstadoIconosToolbar();
     }
 
     private void iniciarPulsoToolbar(View vista, long duracion, long delay) {
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(vista, "scaleX", 1f, 1.2f, 1f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(vista, "scaleY", 1f, 1.2f, 1f);
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(vista, "scaleX", 1f, 1.04f, 1f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(vista, "scaleY", 1f, 1.04f, 1f);
         scaleX.setDuration(duracion);
         scaleY.setDuration(duracion);
         scaleX.setRepeatCount(ObjectAnimator.INFINITE);
@@ -150,6 +184,32 @@ public class BaseActivity extends AppCompatActivity {
         set.playTogether(scaleX, scaleY);
         set.setStartDelay(delay);
         set.start();
+    }
+
+    protected void actualizarEstadoIconosToolbar() {
+        boolean cronometroCorriendo = CronometroActivity.estaCorriendoGlobal;
+        aplicarEstadoIconoToolbar(ivEscudoToolbar, cronometroCorriendo, ContextCompat.getColor(this, R.color.color_verde_exito));
+        aplicarEstadoIconoToolbar(ivConfigToolbar, cronometroCorriendo, TemaUtils.resolverColor(this, R.attr.themeTextoPrimario));
+    }
+
+    private void aplicarEstadoIconoToolbar(ImageView icono, boolean deshabilitar, int colorActivo) {
+        if (icono == null) return;
+        icono.setEnabled(!deshabilitar);
+
+        int colorDestino = deshabilitar ? ContextCompat.getColor(this, R.color.color_gris_icono_apagado) : colorActivo;
+        int colorActual = icono.getImageTintList() != null
+                ? icono.getImageTintList().getDefaultColor()
+                : colorDestino;
+
+        if (colorActual != colorDestino) {
+            ValueAnimator transicionColor = ValueAnimator.ofArgb(colorActual, colorDestino);
+            transicionColor.setDuration(400);
+            transicionColor.addUpdateListener(animacion ->
+                    icono.setImageTintList(ColorStateList.valueOf((int) animacion.getAnimatedValue())));
+            transicionColor.start();
+        }
+
+        icono.animate().alpha(deshabilitar ? 0.45f : 1f).setDuration(400).start();
     }
 
     private int obtenerIndicePorId(int id) {

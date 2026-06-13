@@ -224,6 +224,10 @@ public class alertaActivity extends AppCompatActivity {
             public void onFinish() {
                 pbProgresoSilenciar.setProgress(5000);
                 detenerAlarma();
+                // Se limpia aqui (y no solo en onDestroy) porque la siguiente Activity
+                // puede llamar a redirigirAAlertaSiCorresponde() antes de que
+                // onDestroy() de esta Activity se ejecute, provocando una segunda alerta.
+                estaActiva = false;
                 if (esInfraccion) {
                     GestorAlertas.limpiarInfraccionPendiente(alertaActivity.this);
                     if (CronometroActivity.estaCorriendoGlobal) {

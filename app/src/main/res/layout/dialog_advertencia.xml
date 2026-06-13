@@ -56,7 +56,7 @@
         android:fontFamily="@font/poppins_regular"
         android:gravity="center"
         android:lineSpacingMultiplier="1.3"
-        android:text="¿Estás seguro de renunciar a la sesión? Se aplicará el castigo correspondiente."
+        android:text="¿Estás seguro de renunciar a esta sesión de enfoque? Perderás puntos y tu racha se reiniciará."
         android:textColor="?attr/themeTextoSecundario"
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"

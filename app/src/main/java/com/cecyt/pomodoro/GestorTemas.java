@@ -48,7 +48,27 @@ public class GestorTemas {
         ROSA_OSCURO("rosa_oscuro", "Rosa Oscuro", R.style.Theme_Pomodoro_Dark_Rosa,
                 R.color.tema_oscuro_fondo_principal, R.color.acento_rosa, 150, false),
         ROSA_CLARO("rosa_claro", "Rosa Claro", R.style.Theme_Pomodoro_Light_Rosa,
-                R.color.tema_claro_fondo_principal, R.color.acento_rosa, 150, false);
+                R.color.tema_claro_fondo_principal, R.color.acento_rosa, 150, false),
+
+        MOSTAZA_OSCURO("mostaza_oscuro", "Mostaza Oscuro", R.style.Theme_Pomodoro_Dark_Mostaza,
+                R.color.tema_oscuro_fondo_principal, R.color.acento_mostaza, 150, false),
+        MOSTAZA_CLARO("mostaza_claro", "Mostaza Claro", R.style.Theme_Pomodoro_Light_Mostaza,
+                R.color.tema_claro_fondo_principal, R.color.acento_mostaza, 150, false),
+
+        TURQUESA_OSCURO("turquesa_oscuro", "Turquesa Oscuro", R.style.Theme_Pomodoro_Dark_Turquesa,
+                R.color.tema_oscuro_fondo_principal, R.color.acento_turquesa, 150, false),
+        TURQUESA_CLARO("turquesa_claro", "Turquesa Claro", R.style.Theme_Pomodoro_Light_Turquesa,
+                R.color.tema_claro_fondo_principal, R.color.acento_turquesa, 150, false),
+
+        CORAL_OSCURO("coral_oscuro", "Coral Oscuro", R.style.Theme_Pomodoro_Dark_Coral,
+                R.color.tema_oscuro_fondo_principal, R.color.acento_coral, 150, false),
+        CORAL_CLARO("coral_claro", "Coral Claro", R.style.Theme_Pomodoro_Light_Coral,
+                R.color.tema_claro_fondo_principal, R.color.acento_coral, 150, false),
+
+        LAVANDA_OSCURO("lavanda_oscuro", "Lavanda Oscuro", R.style.Theme_Pomodoro_Dark_Lavanda,
+                R.color.tema_oscuro_fondo_principal, R.color.acento_lavanda, 150, false),
+        LAVANDA_CLARO("lavanda_claro", "Lavanda Claro", R.style.Theme_Pomodoro_Light_Lavanda,
+                R.color.tema_claro_fondo_principal, R.color.acento_lavanda, 150, false);
 
         public final String id;
         public final String nombre;

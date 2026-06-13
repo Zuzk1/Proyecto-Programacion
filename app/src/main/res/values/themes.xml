@@ -133,6 +133,50 @@
         <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
     </style>
 
+    <style name="Theme.Pomodoro.Dark.Mostaza" parent="Theme.Pomodoro.Base.Oscuro">
+        <item name="themeAcento">@color/acento_mostaza</item>
+        <item name="themeAcentoClaro">@color/acento_mostaza_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_mostaza_contenedor_oscuro</item>
+        <item name="themeAcentoOverlay10">@color/acento_mostaza_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_mostaza_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <style name="Theme.Pomodoro.Dark.Turquesa" parent="Theme.Pomodoro.Base.Oscuro">
+        <item name="themeAcento">@color/acento_turquesa</item>
+        <item name="themeAcentoClaro">@color/acento_turquesa_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_turquesa_contenedor_oscuro</item>
+        <item name="themeAcentoOverlay10">@color/acento_turquesa_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_turquesa_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <style name="Theme.Pomodoro.Dark.Coral" parent="Theme.Pomodoro.Base.Oscuro">
+        <item name="themeAcento">@color/acento_coral</item>
+        <item name="themeAcentoClaro">@color/acento_coral_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_coral_contenedor_oscuro</item>
+        <item name="themeAcentoOverlay10">@color/acento_coral_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_coral_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <style name="Theme.Pomodoro.Dark.Lavanda" parent="Theme.Pomodoro.Base.Oscuro">
+        <item name="themeAcento">@color/acento_lavanda</item>
+        <item name="themeAcentoClaro">@color/acento_lavanda_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_lavanda_contenedor_oscuro</item>
+        <item name="themeAcentoOverlay10">@color/acento_lavanda_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_lavanda_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
     <!-- ============ TEMAS CLAROS (uno por color de acento) ============ -->
 
     <style name="Theme.Pomodoro.Light.Azul" parent="Theme.Pomodoro.Base.Claro">
@@ -207,6 +251,50 @@
         <item name="themeAcentoContenedor">@color/acento_rosa_contenedor_claro</item>
         <item name="themeAcentoOverlay10">@color/acento_rosa_overlay_10</item>
         <item name="themeAcentoOverlay20">@color/acento_rosa_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <style name="Theme.Pomodoro.Light.Mostaza" parent="Theme.Pomodoro.Base.Claro">
+        <item name="themeAcento">@color/acento_mostaza</item>
+        <item name="themeAcentoClaro">@color/acento_mostaza_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_mostaza_contenedor_claro</item>
+        <item name="themeAcentoOverlay10">@color/acento_mostaza_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_mostaza_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <style name="Theme.Pomodoro.Light.Turquesa" parent="Theme.Pomodoro.Base.Claro">
+        <item name="themeAcento">@color/acento_turquesa</item>
+        <item name="themeAcentoClaro">@color/acento_turquesa_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_turquesa_contenedor_claro</item>
+        <item name="themeAcentoOverlay10">@color/acento_turquesa_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_turquesa_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <style name="Theme.Pomodoro.Light.Coral" parent="Theme.Pomodoro.Base.Claro">
+        <item name="themeAcento">@color/acento_coral</item>
+        <item name="themeAcentoClaro">@color/acento_coral_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_coral_contenedor_claro</item>
+        <item name="themeAcentoOverlay10">@color/acento_coral_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_coral_overlay_20</item>
+        <item name="colorPrimary">?attr/themeAcento</item>
+        <item name="colorSecondary">?attr/themeAcento</item>
+        <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>
+    </style>
+
+    <style name="Theme.Pomodoro.Light.Lavanda" parent="Theme.Pomodoro.Base.Claro">
+        <item name="themeAcento">@color/acento_lavanda</item>
+        <item name="themeAcentoClaro">@color/acento_lavanda_claro</item>
+        <item name="themeAcentoContenedor">@color/acento_lavanda_contenedor_claro</item>
+        <item name="themeAcentoOverlay10">@color/acento_lavanda_overlay_10</item>
+        <item name="themeAcentoOverlay20">@color/acento_lavanda_overlay_20</item>
         <item name="colorPrimary">?attr/themeAcento</item>
         <item name="colorSecondary">?attr/themeAcento</item>
         <item name="colorSecondaryContainer">?attr/themeAcentoContenedor</item>

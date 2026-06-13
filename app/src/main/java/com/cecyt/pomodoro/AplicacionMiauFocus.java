@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.SystemClock;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -42,9 +43,32 @@ public class AplicacionMiauFocus extends Application implements DefaultLifecycle
 
     @Override
     public void onStop(@NonNull LifecycleOwner propietario) {
-        if (CronometroActivity.estaCorriendoGlobal && pantallaEncendida) {
+        if (CronometroActivity.estaCorriendoGlobal && pantallaEncendida
+                && new GestorConfiguracion(this).isAlertasDistraccionHabilitadas()) {
             GestorAlertas.marcarInfraccionPendiente(this);
-            new GestorEstadisticas(this).registrarFallo();
+
+            long tiempoRestante = CronometroActivity.tiempoFinEstimadoGlobal - SystemClock.elapsedRealtime();
+            if (tiempoRestante < 0) tiempoRestante = 0;
+
+            GestorConfiguracion gestorConfiguracion = new GestorConfiguracion(this);
+            long duracionEtapaActual;
+            if (CronometroActivity.esDescansoGlobal) {
+                duracionEtapaActual = CronometroActivity.cicloActualGlobal == 1
+                        ? gestorConfiguracion.getMinutosDescansoLargo() * 60000L
+                        : gestorConfiguracion.getMinutosDescansoCorto() * 60000L;
+            } else {
+                duracionEtapaActual = gestorConfiguracion.getMinutosTrabajo() * 60000L;
+            }
+            long transcurridoEtapaActual = duracionEtapaActual - tiempoRestante;
+            boolean etapaYaCompletada = CronometroActivity.cicloActualGlobal > 1;
+            boolean menosDeDosMinutos = transcurridoEtapaActual < CronometroActivity.UMBRAL_SANCION;
+            if (!etapaYaCompletada && !menosDeDosMinutos) {
+                new GestorEstadisticas(this).registrarFallo();
+            }
+
+            GestorAlertas.guardarEstadoCronometro(this, tiempoRestante,
+                    CronometroActivity.esDescansoGlobal, CronometroActivity.cicloActualGlobal,
+                    CronometroActivity.tituloGlobal);
 
             Intent intentPausar = new Intent(this, CronometroService.class);
             intentPausar.setAction(CronometroService.ACCION_PAUSAR);
@@ -52,7 +76,7 @@ public class AplicacionMiauFocus extends Application implements DefaultLifecycle
 
             GestorAlertas.mostrarAlertaPomodoro(this,
                     "¡Te estás distrayendo!",
-                    "Regresa a tu sesión de enfoque, el cronómetro sigue corriendo");
+                    "Tu cronómetro está en pausa. Vuelve a Miau Focus para continuar");
         }
     }
 }

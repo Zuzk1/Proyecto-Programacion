@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:name=".AplicacionMiauFocus"
@@ -66,6 +65,11 @@
 
         <activity
             android:name=".configuracionesAppActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ajustesGeneralesActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 

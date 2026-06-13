@@ -91,4 +91,36 @@
     <color name="acento_rosa_overlay_10">#1AE91E63</color>
     <color name="acento_rosa_overlay_20">#33E91E63</color>
 
+    <!-- ============ ACENTO MOSTAZA ============ -->
+    <color name="acento_mostaza">#F5A800</color>
+    <color name="acento_mostaza_claro">#FFCB4D</color>
+    <color name="acento_mostaza_contenedor_oscuro">#4A3A0A</color>
+    <color name="acento_mostaza_contenedor_claro">#FFE9B8</color>
+    <color name="acento_mostaza_overlay_10">#1AF5A800</color>
+    <color name="acento_mostaza_overlay_20">#33F5A800</color>
+
+    <!-- ============ ACENTO TURQUESA ============ -->
+    <color name="acento_turquesa">#00BCD4</color>
+    <color name="acento_turquesa_claro">#4DD0E1</color>
+    <color name="acento_turquesa_contenedor_oscuro">#0A3A40</color>
+    <color name="acento_turquesa_contenedor_claro">#CCEFF3</color>
+    <color name="acento_turquesa_overlay_10">#1A00BCD4</color>
+    <color name="acento_turquesa_overlay_20">#3300BCD4</color>
+
+    <!-- ============ ACENTO CORAL ============ -->
+    <color name="acento_coral">#FF6F61</color>
+    <color name="acento_coral_claro">#FF8A80</color>
+    <color name="acento_coral_contenedor_oscuro">#4A2620</color>
+    <color name="acento_coral_contenedor_claro">#FFDAD6</color>
+    <color name="acento_coral_overlay_10">#1AFF6F61</color>
+    <color name="acento_coral_overlay_20">#33FF6F61</color>
+
+    <!-- ============ ACENTO LAVANDA ============ -->
+    <color name="acento_lavanda">#7E57C2</color>
+    <color name="acento_lavanda_claro">#B39DDB</color>
+    <color name="acento_lavanda_contenedor_oscuro">#2E2240</color>
+    <color name="acento_lavanda_contenedor_claro">#E5DAF5</color>
+    <color name="acento_lavanda_overlay_10">#1A7E57C2</color>
+    <color name="acento_lavanda_overlay_20">#337E57C2</color>
+
 </resources>
